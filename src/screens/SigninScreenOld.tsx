@@ -17,6 +17,8 @@ import {useDispatch} from 'react-redux';
 import {setSignIn} from '@/redux/slices/authSlice';
 import {useNavigation} from '@react-navigation/native';
 
+import TextInputApp from '@/components/TextInput';
+
 const SigninScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -29,15 +31,11 @@ const SigninScreen = () => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const [passwordVisible, setPasswordVisible] = useState(false);
   const [credentials, setCredentials] = useState({
     email: '',
     password: '',
   });
 
-  const togglePasswordVisibility = () => {
-    setPasswordVisible(!passwordVisible);
-  };
   const handleSignin = () => {
     const user = {
       isLoggedIn: true,
@@ -101,69 +99,37 @@ const SigninScreen = () => {
         />
         <View style={styles.formContainer}>
           {/* Email Input */}
-          <TextInput
-            onChangeText={text => setCredentials({...credentials, email: text})}
-            left={
-              <TextInput.Icon
-                icon={() => <Icon name="email" color="black" />}
-              />
-            }
-            keyboardType="email-address"
-            error={isSubmitted && !!errors.email}
-            outlineColor={colors.border}
-            placeholder="Enter your email"
-            activeOutlineColor={colors.primary}
-            placeholderTextColor={colors.secondaryLightText}
-            outlineStyle={{borderWidth: 1}}
-            mode="outlined"
+          <TextInputApp
             label="Email"
+            onChangeText={text => setCredentials({...credentials, email: text})}
             style={{marginTop: 30, justifyContent: 'center'}}
+            placeholder="Enter your email"
+            keyboardType="email-address"
+            leftIconOptions={{
+              name: 'email',
+              color: 'black',
+              size: 20,
+            }}
+            errorMessage={errors.email}
+            touched={isSubmitted}
           />
-          {isSubmitted && (
-            <Text
-              color="red"
-              fontVariant="sm"
-              style={{alignSelf: 'flex-start', marginTop: 4}}>
-              {errors.email}
-            </Text>
-          )}
 
           {/* Password Input */}
-          <TextInput
+          <TextInputApp
+            label="Password"
+            isPassword
             onChangeText={text =>
               setCredentials({...credentials, password: text})
             }
-            left={
-              <TextInput.Icon icon={() => <Icon name="lock" color="black" />} />
-            }
-            error={isSubmitted && !!errors.password}
-            mode="outlined"
-            outlineColor={colors.border}
-            placeholderTextColor={colors.secondaryLightText}
-            label="Password"
-            secureTextEntry={!passwordVisible}
             placeholder="Enter your password"
-            style={{marginTop: 30}}
-            right={
-              <TextInput.Icon
-                icon={() => (
-                  <Icon
-                    onPress={togglePasswordVisibility}
-                    name={passwordVisible ? 'eye' : 'eye-off'}
-                    color="black"
-                  />
-                )}
-              />
-            }
+            leftIconOptions={{
+              name: 'lock',
+              color: 'black',
+              size: 20,
+            }}
+            errorMessage={errors.password}
+            touched={isSubmitted}
           />
-          {isSubmitted && (
-            <Text
-              color="red"
-              fontVariant="sm"
-              style={{alignSelf: 'flex-start', marginTop: 4}}>
-              {errors.password}
-            </Text>
-          )}
 
           {/* Forgot Password */}
           <TouchableOpacity
