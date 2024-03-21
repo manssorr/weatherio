@@ -28,6 +28,8 @@ end
 target 'weatherio' do
   config = use_native_modules!
 
+  use_frameworks! :linkage => :static
+
   use_react_native!(
     :path => config[:reactNativePath],
     # Enables Flipper.
@@ -38,6 +40,9 @@ target 'weatherio' do
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
+
+  $RNFirebaseAsStaticFramework = true
+
 
   target 'weatherioTests' do
     inherit! :complete
