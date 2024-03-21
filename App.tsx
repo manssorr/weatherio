@@ -1,34 +1,39 @@
 import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import {StatusBar} from 'react-native';
+import {PersistGate} from 'redux-persist/integration/react';
 
-import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {PaperProvider, configureFonts} from 'react-native-paper';
+import colors from '@/style/colors';
+import {Provider} from 'react-redux';
+import {persistor, store} from '@/redux/store';
+import AppRoute from '@/navigation/MainNavigator';
+
+const fontConfig = {
+  fontFamily: 'Poppins-Regular',
+};
 
 function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-    </SafeAreaView>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <PaperProvider
+          theme={{
+            fonts: configureFonts({config: fontConfig}),
+            colors: {
+              background: colors.white,
+              primary: colors.primary,
+              error: colors.red,
+              placeholder: colors.secondaryLightText,
+              text: colors.darkText,
+            },
+            roundness: 10,
+          }}>
+          <AppRoute />
+        </PaperProvider>
+        <StatusBar barStyle="default" />
+      </PersistGate>
+    </Provider>
   );
 }
-
-const styles = StyleSheet.create({});
 
 export default App;
