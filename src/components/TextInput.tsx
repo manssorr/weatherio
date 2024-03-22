@@ -1,13 +1,15 @@
-import {StyleSheet, Text, View} from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, View} from 'react-native';
+import {
+  TextInput as RNPTextInput,
+  TextInputProps as RNPTextInputProps,
+} from 'react-native-paper';
+import Icon from './Icon';
 import ErrorMessage from './ErrorMessage';
+import colors from '@/style/colors';
 import {TIconsNames} from '../assets/index';
 import {TColor} from '../style/types';
-import colors from '@/style/colors';
-import {TextInput as RNPTextInput, TextInputProps} from 'react-native-paper';
-import Icon from './Icon';
-import {useState} from 'react';
-
-interface IProps extends TextInputProps {
+interface TextInputProps extends Omit<RNPTextInputProps, 'style'> {
   leftIconOptions?: {
     name: TIconsNames;
     color: TColor;
@@ -20,9 +22,21 @@ interface IProps extends TextInputProps {
   placeholder: string;
 
   isPassword?: boolean;
+  inputStyle?: RNPTextInputProps['style']; // Specify that inputStyle is specifically for the TextInput
 }
 
-const TextInput = (props: IProps): React.ReactElement<IProps> => {
+/**
+ * A customizable TextInput component that integrates with the React Native Paper library
+ * and provides additional functionality like displaying an error message and toggling password visibility.
+ */
+const TextInput: React.FC<TextInputProps> = ({
+  leftIconOptions,
+  errorMessage,
+  touched,
+  isPassword = false,
+  inputStyle,
+  ...props
+}) => {
   const [passwordVisible, setPasswordVisible] = useState<boolean>(true);
 
   const togglePasswordVisibility = () => {
@@ -30,27 +44,28 @@ const TextInput = (props: IProps): React.ReactElement<IProps> => {
   };
 
   return (
-    <View>
+    <View style={inputStyle}>
       <RNPTextInput
+        mode="outlined"
+        outlineStyle={{borderWidth: 1}}
         outlineColor={colors.border}
         activeOutlineColor={colors.primary}
         placeholderTextColor={colors.secondaryLightText}
-        outlineStyle={{borderWidth: 1}}
-        mode="outlined"
         left={
-          props.leftIconOptions?.name && (
+          leftIconOptions && (
             <RNPTextInput.Icon
               icon={() => (
                 <Icon
-                  name={props.leftIconOptions?.name as TIconsNames}
-                  color={props.leftIconOptions?.color}
+                  name={leftIconOptions.name}
+                  color={leftIconOptions.color}
+                  size={leftIconOptions.size}
                 />
               )}
             />
           )
         }
         right={
-          props.isPassword && (
+          isPassword && (
             <RNPTextInput.Icon
               icon={() => (
                 <Icon
@@ -62,11 +77,11 @@ const TextInput = (props: IProps): React.ReactElement<IProps> => {
             />
           )
         }
-        error={props.touched && !!props.errorMessage}
-        secureTextEntry={props.isPassword && passwordVisible}
-        {...props}
+        secureTextEntry={isPassword && passwordVisible}
+        error={touched && !!errorMessage}
+        {...props} // Spread the remaining props to allow customizing the underlying RNPTextInput further
       />
-      {props.touched && <ErrorMessage message={props.errorMessage} />}
+      {touched && errorMessage && <ErrorMessage message={errorMessage} />}
     </View>
   );
 };

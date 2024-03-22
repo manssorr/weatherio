@@ -14,13 +14,14 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     paddingHorizontal: 15,
-    marginTop: 30,
   },
   textInput: {
-    marginBottom: 5,
+    marginTop: 30,
+    justifyContent: 'center',
   },
   forgotPassword: {
     alignSelf: 'flex-end',
+    marginTop: 10,
   },
   loginButton: {
     borderRadius: 8,
