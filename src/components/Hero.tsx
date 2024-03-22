@@ -1,4 +1,4 @@
-import {ImageBackground, StyleSheet, View} from 'react-native';
+import {ImageBackground, StyleSheet, View, type ViewStyle} from 'react-native';
 
 import DEVICE from '@/constants/device';
 import Text from '@/components/Text';
@@ -12,27 +12,38 @@ interface IProps {
   icon?: TIconsNames;
   onPress?: () => void;
   bgImage?: any;
+  wrapperStyle?: ViewStyle;
 }
 
-const Hero = (props: IProps): React.ReactElement<IProps> => {
+const Hero = ({
+  title,
+  icon,
+  onPress,
+  bgImage,
+  wrapperStyle,
+  ...props
+}: IProps): React.ReactElement<IProps> => {
   return (
     <View
-      style={{
-        height: DEVICE.SCREEN_HEIGHT / 4,
-      }}>
+      style={[
+        {
+          height: DEVICE.SCREEN_HEIGHT / 4,
+        },
+        wrapperStyle,
+      ]}>
       <ImageBackground
-        source={props.bgImage}
+        source={bgImage}
         imageStyle={styles.hero_baground}
         resizeMode="cover"
       />
       <View style={styles.hero_container}>
-        {props.icon && (
+        {icon && (
           <View style={styles.hero_icon}>
-            <Icon name={props.icon} color="white" onPress={props.onPress} />
+            <Icon name={icon} color="white" onPress={onPress} />
           </View>
         )}
         <Text fontVariant="xlg" color="white" style={styles.hero_text}>
-          {props.title}
+          {title}
         </Text>
       </View>
     </View>

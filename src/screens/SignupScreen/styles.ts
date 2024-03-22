@@ -6,7 +6,9 @@ const styles = StyleSheet.create({
   formContainer: {
     paddingHorizontal: 15,
   },
-
+  hero: {
+    margin: 5,
+  },
   forgotPassword: {
     alignSelf: 'flex-end',
     marginTop: 10,
@@ -63,7 +65,8 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     paddingHorizontal: 15,
-    paddingTop: 30,
+    marginTop: 10,
+    paddingBottom: 10,
   },
 
   pressableCheckbox: {
@@ -76,7 +79,7 @@ const styles = StyleSheet.create({
   },
 
   textInput: {
-    marginBottom: 20,
+    marginBottom: 10,
   },
 });
 
