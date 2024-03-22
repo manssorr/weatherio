@@ -100,7 +100,9 @@ const SigninScreen = () => {
             {/* Icons with extracted styles */}
             {/* Google, Facebook, and X icons remain unchanged in terms of functionality */}
             <Icon
-              onPress={() => onGoogleButtonPress()}
+              onPress={() =>
+                Alert.alert('Sign in with Facebook will be added soon')
+              }
               name="google"
               noColor
               style={styles.icon}
