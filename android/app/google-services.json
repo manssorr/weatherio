@@ -12,7 +12,20 @@
           "package_name": "com.weatherio"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "291544356601-eijlo44ca2tgfo71f6hdj42c8b00a8tj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.weatherio",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "291544356601-3092mip9sv91k4631as0rtj95h7n8u3h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCJfADpYLLJa9fnW9iXf3ua0pfkY1GBD5Y"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "291544356601-3092mip9sv91k4631as0rtj95h7n8u3h.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "291544356601-s0sbsvlf7pan2tr3pimod2lvh2recl32.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.weatherio"
+              }
+            }
+          ]
         }
       }
     }

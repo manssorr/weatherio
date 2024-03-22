@@ -21,6 +21,7 @@ const SigninScreen = () => {
     setCredentials,
     handleSubmit,
     loading,
+    onGoogleButtonPress,
   } = useSigninScreen();
 
   return (
@@ -99,9 +100,7 @@ const SigninScreen = () => {
             {/* Icons with extracted styles */}
             {/* Google, Facebook, and X icons remain unchanged in terms of functionality */}
             <Icon
-              onPress={() =>
-                Alert.alert('Sign in with Google will be added soon')
-              }
+              onPress={() => onGoogleButtonPress()}
               name="google"
               noColor
               style={styles.icon}

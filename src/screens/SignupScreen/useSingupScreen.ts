@@ -33,11 +33,11 @@ const useSignupScreen = () => {
     confirmPassword: string;
     acceptTerms: boolean;
   }>({
-    username: 'Mansour',
-    email: 'test@me.com',
-    password: '123456',
-    confirmPassword: '123456',
-    acceptTerms: true,
+    username: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    acceptTerms: false,
   });
 
   const togglePasswordVisibility = (type: 'main' | 'confirm') => {

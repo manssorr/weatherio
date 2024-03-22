@@ -1,6 +1,8 @@
 import {useNavigation} from '@react-navigation/native';
 import {useState, useEffect} from 'react';
 import auth from '@react-native-firebase/auth';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
+
 import {isObjectEmpty} from '@/utils/helper';
 
 const useSigninScreen = () => {
@@ -17,14 +19,56 @@ const useSigninScreen = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const [credentials, setCredentials] = useState({
-    email: 'test@me.com',
-    password: '123456',
+    email: '',
+    password: '',
   });
 
   const handleSignin = () => {
     setLoading(true);
     auth()
       .signInWithEmailAndPassword(credentials.email, credentials.password)
+      .then(() => {
+        console.log('User account created & signed in!');
+      })
+      .catch(error => {
+        if (error.code === 'auth/email-already-in-use') {
+          console.log('That email address is already in use!');
+          setErrors({
+            ...errors,
+            email: 'That email address is already in use!',
+          });
+        }
+
+        if (error.code === 'auth/invalid-email') {
+          console.log('That email address is invalid!');
+          setErrors({
+            ...errors,
+            email: 'That email address is invalid!',
+          });
+        }
+
+        console.log('Error signing in:', error.message);
+
+        setAuthError('Wrong email or password');
+      })
+      .finally(() => setLoading(false));
+  };
+
+  const onGoogleButtonPress = async () => {
+    // setLoading(true);
+
+    // Check if your device supports Google Play
+    await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
+    // Get the users ID token
+    const {idToken} = await GoogleSignin.signIn();
+    console.log(`idToken`, idToken);
+
+    // Create a Google credential with the token
+    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+
+    // Sign-in the user with the credential
+    auth()
+      .signInWithCredential(googleCredential)
       .then(() => {
         console.log('User account created & signed in!');
       })
@@ -102,6 +146,7 @@ const useSigninScreen = () => {
     setCredentials,
     handleSubmit,
     loading,
+    onGoogleButtonPress,
   };
 };
 export default useSigninScreen;

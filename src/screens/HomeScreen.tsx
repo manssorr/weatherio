@@ -24,8 +24,9 @@ const HomeScreen = (): React.ReactElement<IProps> => {
     const api = 'd270e786016642129ab190318242103';
     const options = {
       method: 'GET',
-      url: `http://api.weatherapi.com/v1/current.json?key=${api}&q=${cityName}&aqi=no`,
+      url: `https://api.weatherapi.com/v1/current.json?key=${api}&q=${cityName}&aqi=no`,
       headers: {
+        Accept: 'application/json',
         'Content-Type': 'application/json',
       },
     };
@@ -45,7 +46,7 @@ const HomeScreen = (): React.ReactElement<IProps> => {
 
         return city;
       }
-
+      Alert.alert('Error', result.error);
       console.log('Result.message', result.message);
     } catch (error) {
       console.error('Error in getWeather: ', error);

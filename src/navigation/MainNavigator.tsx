@@ -7,6 +7,12 @@ import {selectIsLoggedIn, setSignIn} from '@/redux/slices/authSlice';
 import Text from '@/components/Text';
 import {useState, useEffect, type SetStateAction} from 'react';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
+
+GoogleSignin.configure({
+  webClientId:
+    '291544356601-s0sbsvlf7pan2tr3pimod2lvh2recl32.apps.googleusercontent.com',
+});
 
 const AppRoute = () => {
   const dispatch = useDispatch();
