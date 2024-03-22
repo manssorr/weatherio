@@ -7,7 +7,6 @@ import colors from '@/style/colors';
 import fontStyles from '@/style/fonts';
 import {Button} from 'react-native-paper';
 import TextGradient from '@furkankaya/react-native-linear-text-gradient';
-import SquirImg from '@/components/SquirImg';
 import {useButtonAnimation} from '@/components/Animations/helpersAmin';
 import {useDragAndRelease} from '@/components/Animations/useDragAndRelease';
 import useSmoothRotation from '@/components/Animations/useSmoothRotation';
@@ -28,6 +27,7 @@ const Welcome = ({}) => {
 
   useEffect(() => {
     buttonAnimation.start();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <LinearGradient

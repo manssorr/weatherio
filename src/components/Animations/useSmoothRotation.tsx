@@ -58,7 +58,7 @@ const useSmoothIconAnimation = (
     return () => {
       animation.stop();
     };
-  }, [rotateValue, value]);
+  }, [duration, easing, rotateValue, value]);
 
   const spin: Animated.AnimatedInterpolation<number> = rotateValue.interpolate({
     inputRange: [-value, 0, value],
