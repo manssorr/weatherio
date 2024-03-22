@@ -48,8 +48,11 @@ const TextInput: React.FC<TextInputProps> = ({
   return (
     <View style={style}>
       <RNPTextInput
+        cursorColor={colors.primary}
+        selectionColor={colors.primary}
         style={inputStyle}
         mode="outlined"
+        textColor={colors.black}
         outlineStyle={{borderWidth: 1}}
         outlineColor={colors.border}
         activeOutlineColor={colors.primary}
