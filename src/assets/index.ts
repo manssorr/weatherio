@@ -13,7 +13,13 @@ export type TIconsNames =
   | 'chevron-left'
   | 'lock';
 
-type ImagesNames = 'hero' | 'city-cover';
+export type ImagesNames =
+  | 'hero'
+  | 'city-cover'
+  | 'starts-night'
+  | 'moon-cloud-light'
+  | 'cloud-sun'
+  | 'cloud-stars-night';
 type IImages = Record<ImagesNames, ImageProps['source']>;
 
 interface IAssets {
@@ -37,6 +43,10 @@ const assets: IAssets = {
   images: {
     hero: require('./images/hero-bg.png'),
     'city-cover': require('./images/city-cover.jpg'),
+    'starts-night': require('./images/starts-night.png'),
+    'moon-cloud-light': require('./images/moon-cloud-light.png'),
+    'cloud-sun': require('./images/cloud-sun.png'),
+    'cloud-stars-night': require('./images/cloud-stars-night.png'),
   },
 };
 
