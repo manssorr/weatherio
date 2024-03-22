@@ -101,7 +101,7 @@ const SigninScreen = () => {
             {/* Google, Facebook, and X icons remain unchanged in terms of functionality */}
             <Icon
               onPress={() =>
-                Alert.alert('Sign in with Facebook will be added soon')
+                Alert.alert('Sign in with Google will be added soon')
               }
               name="google"
               noColor
