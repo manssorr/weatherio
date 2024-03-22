@@ -6,6 +6,7 @@ import {View, SafeAreaView, Alert, FlatList} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {getCelsius} from '@/utils/helper';
 import Text from '@/components/Text';
+import auth from '@react-native-firebase/auth';
 
 interface IProps {}
 
@@ -45,7 +46,7 @@ const HomeScreen = (): React.ReactElement<IProps> => {
         return city;
       }
 
-      console.log(`result.message`, result.message);
+      console.log('Result.message', result.message);
     } catch (error) {
       console.error('Error in getWeather: ', error);
     }
@@ -59,7 +60,7 @@ const HomeScreen = (): React.ReactElement<IProps> => {
         getWeather('mansoura'),
         getWeather('alexandria'),
       ]);
-      console.log(`response`, response);
+      console.log('Response', response);
       // filter undefined
       setCities(
         response.filter(city => city !== undefined).map(city => city as ICity),
@@ -73,6 +74,7 @@ const HomeScreen = (): React.ReactElement<IProps> => {
 
   useEffect(() => {
     fetchWeather();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleLogout = () => {
@@ -81,7 +83,17 @@ const HomeScreen = (): React.ReactElement<IProps> => {
       'Are you sure you want to logout?',
       [
         {text: 'Cancel', style: 'cancel'},
-        {text: 'OK', onPress: () => dispatch(setSignOut())},
+        {
+          text: 'OK',
+          onPress: () => {
+            auth()
+              .signOut()
+              .then(() => {
+                dispatch(setSignOut());
+                console.log('User signed out!');
+              });
+          },
+        },
       ],
       {cancelable: true},
     );

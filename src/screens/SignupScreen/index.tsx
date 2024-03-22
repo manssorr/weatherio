@@ -1,26 +1,33 @@
-import React from 'react';
 import {
   ScrollView,
   SafeAreaView,
-  StyleSheet,
   View,
   Pressable,
   KeyboardAvoidingView,
 } from 'react-native';
-import {Button} from 'react-native-paper';
 import Checkbox from '@react-native-community/checkbox';
 import Text from '@/components/Text';
 import Hero from '@/components/Hero';
 import colors from '@/style/colors';
-import fontStyles from '@/style/fonts';
 import assets from '@/assets';
 import useSignupScreen from './useSingupScreen';
 import TextInputApp from '@/components/TextInput';
 import ErrorMessage from '@/components/ErrorMessage';
+import Button from '@/components/Button';
+import {isObjectEmpty} from '@/utils/helper';
+import styles from './styles';
 
 const SignupScreen = () => {
-  const {navigation, setUserData, userData, errors, isSubmitted, handleSubmit} =
-    useSignupScreen();
+  const {
+    navigation,
+    authError,
+    handleChangeField,
+    userData,
+    errors,
+    isSubmitted,
+    handleSubmit,
+    loading,
+  } = useSignupScreen();
 
   return (
     <SafeAreaView style={styles.safeAreaView}>
@@ -37,9 +44,9 @@ const SignupScreen = () => {
           <ScrollView style={styles.scrollView}>
             <TextInputApp
               style={styles.textInput}
-              onChangeText={text => setUserData({...userData, userName: text})}
-              errorMessage={errors.userName}
-              value={userData.userName}
+              onChangeText={text => handleChangeField('username', text)}
+              errorMessage={errors.username}
+              value={userData.username}
               placeholder="Enter your name"
               label="User name"
               touched={isSubmitted}
@@ -48,7 +55,7 @@ const SignupScreen = () => {
             <TextInputApp
               style={styles.textInput}
               keyboardType="email-address"
-              onChangeText={text => setUserData({...userData, email: text})}
+              onChangeText={text => handleChangeField('email', text)}
               errorMessage={errors.email}
               value={userData.email}
               placeholder="Enter your email"
@@ -57,7 +64,7 @@ const SignupScreen = () => {
             />
             <TextInputApp
               style={styles.textInput}
-              onChangeText={text => setUserData({...userData, password: text})}
+              onChangeText={text => handleChangeField('password', text)}
               errorMessage={errors.password}
               value={userData.password}
               placeholder="Enter your password"
@@ -68,9 +75,7 @@ const SignupScreen = () => {
 
             <TextInputApp
               style={styles.textInput}
-              onChangeText={text =>
-                setUserData({...userData, confirmPassword: text})
-              }
+              onChangeText={text => handleChangeField('confirmPassword', text)}
               errorMessage={errors.confirmPassword}
               value={userData.confirmPassword}
               placeholder="Confirm your password"
@@ -82,13 +87,13 @@ const SignupScreen = () => {
             {/* Checkbox */}
             <Pressable
               onPress={() =>
-                setUserData(prev => ({...prev, acceptTerms: !prev.acceptTerms}))
+                handleChangeField('acceptTerms', !userData.acceptTerms)
               }
               style={styles.pressableCheckbox}>
               <Checkbox
                 value={userData.acceptTerms}
                 onValueChange={newValue =>
-                  setUserData({...userData, acceptTerms: newValue})
+                  handleChangeField('acceptTerms', newValue)
                 }
                 boxType="square"
                 style={styles.checkbox}
@@ -114,14 +119,15 @@ const SignupScreen = () => {
               <ErrorMessage message={errors.acceptTerms} />
             )}
             {/* Sign Up Button */}
+
             <Button
+              loading={loading}
               onPress={handleSubmit}
-              mode="contained"
-              labelStyle={styles.signUpButtonLabel}
-              contentStyle={styles.signUpButtonContent}
-              style={styles.signUpButton}>
-              Sign Up
-            </Button>
+              title="Sign Up"
+              disabled={isSubmitted && !isObjectEmpty(errors)}
+              style={styles.loginButton}
+            />
+            {authError && isSubmitted && <ErrorMessage message={authError} />}
           </ScrollView>
         </KeyboardAvoidingView>
       </View>
@@ -130,47 +136,3 @@ const SignupScreen = () => {
 };
 
 export default SignupScreen;
-
-const styles = StyleSheet.create({
-  safeAreaView: {
-    flex: 1,
-    backgroundColor: colors.white,
-  },
-  container: {
-    flex: 1,
-    backgroundColor: colors.white,
-  },
-  keyboardAvoidingView: {
-    flex: 1,
-  },
-  scrollView: {
-    paddingHorizontal: 15,
-    paddingTop: 30,
-  },
-
-  pressableCheckbox: {
-    marginTop: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  checkbox: {
-    alignSelf: 'center',
-  },
-
-  signUpButton: {
-    borderRadius: 8,
-    marginTop: 20,
-    marginBottom: 20,
-  },
-  signUpButtonContent: {
-    height: 50,
-  },
-  signUpButtonLabel: {
-    color: colors.white,
-    fontSize: fontStyles.md.fontSize,
-    fontWeight: 'bold',
-  },
-  textInput: {
-    marginBottom: 20,
-  },
-});

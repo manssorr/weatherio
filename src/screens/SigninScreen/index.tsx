@@ -1,5 +1,4 @@
 import {Alert, TouchableOpacity, SafeAreaView, View} from 'react-native';
-import {Button} from 'react-native-paper';
 import assets from '@/assets';
 import Hero from '@/components/Hero';
 import Icon from '@/components/Icon';
@@ -8,15 +7,20 @@ import Text from '@/components/Text';
 import TextInputApp from '@/components/TextInput';
 import useSigninScreen from './useSinginScreen';
 import styles from './styles';
+import ErrorMessage from '@/components/ErrorMessage';
+import Button from '@/components/Button';
+import {isObjectEmpty} from '@/utils/helper';
 
 const SigninScreen = () => {
   const {
     navigation,
     errors,
+    authError,
     isSubmitted,
     credentials,
     setCredentials,
     handleSubmit,
+    loading,
   } = useSigninScreen();
 
   return (
@@ -34,6 +38,7 @@ const SigninScreen = () => {
           {/* Email Input */}
           <TextInputApp
             label="Email"
+            value={credentials.email}
             onChangeText={text => setCredentials({...credentials, email: text})}
             style={styles.textInput}
             placeholder="Enter your email"
@@ -49,6 +54,7 @@ const SigninScreen = () => {
 
           {/* Password Input */}
           <TextInputApp
+            value={credentials.password}
             label="Password"
             isPassword
             onChangeText={text =>
@@ -74,14 +80,13 @@ const SigninScreen = () => {
 
           {/* Login Button */}
           <Button
-            style={styles.loginButton}
-            contentStyle={styles.loginButtonContent}
-            labelStyle={styles.loginButtonLabel}
-            mode="contained"
-            onPress={handleSubmit}>
-            Sign In
-          </Button>
-
+            title="Sign in"
+            onPress={handleSubmit}
+            loading={loading}
+            style={styles.signinButton}
+            disabled={isSubmitted && !isObjectEmpty(errors)}
+          />
+          {authError && isSubmitted && <ErrorMessage message={authError} />}
           {/* Divider */}
           <View style={styles.dividerContainer}>
             <View style={styles.divider} />

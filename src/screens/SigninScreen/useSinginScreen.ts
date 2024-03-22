@@ -1,11 +1,12 @@
-import {setSignIn} from '@/redux/slices/authSlice';
 import {useNavigation} from '@react-navigation/native';
 import {useState, useEffect} from 'react';
-import {useDispatch} from 'react-redux';
+import auth from '@react-native-firebase/auth';
+import {isObjectEmpty} from '@/utils/helper';
 
 const useSigninScreen = () => {
-  const dispatch = useDispatch();
   const navigation = useNavigation();
+  const [authError, setAuthError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const [errors, setErrors] = useState({
     email: '',
@@ -16,18 +17,39 @@ const useSigninScreen = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const [credentials, setCredentials] = useState({
-    email: '',
-    password: '',
+    email: 'test@me.com',
+    password: '123456',
   });
 
   const handleSignin = () => {
-    const user = {
-      isLoggedIn: true,
-      email: credentials.email,
-      userName: 'User Name',
-    };
+    setLoading(true);
+    auth()
+      .signInWithEmailAndPassword(credentials.email, credentials.password)
+      .then(() => {
+        console.log('User account created & signed in!');
+      })
+      .catch(error => {
+        if (error.code === 'auth/email-already-in-use') {
+          console.log('That email address is already in use!');
+          setErrors({
+            ...errors,
+            email: 'That email address is already in use!',
+          });
+        }
 
-    dispatch(setSignIn(user));
+        if (error.code === 'auth/invalid-email') {
+          console.log('That email address is invalid!');
+          setErrors({
+            ...errors,
+            email: 'That email address is invalid!',
+          });
+        }
+
+        console.log('Error signing in:', error.message);
+
+        setAuthError('Wrong email or password');
+      })
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => {
@@ -54,7 +76,7 @@ const useSigninScreen = () => {
 
     // Set the errors and update form validity
     setErrors(errorsStore);
-    setIsFormValid(Object.keys(errorsStore).length === 0);
+    setIsFormValid(isObjectEmpty(errorsStore));
   };
 
   const handleSubmit = () => {
@@ -69,14 +91,17 @@ const useSigninScreen = () => {
       console.log('Form has errors. Please correct them.');
     }
   };
+
   return {
     navigation,
     errors,
+    authError,
     isFormValid,
     isSubmitted,
     credentials,
     setCredentials,
     handleSubmit,
+    loading,
   };
 };
 export default useSigninScreen;

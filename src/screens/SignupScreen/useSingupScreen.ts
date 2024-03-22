@@ -1,14 +1,13 @@
-import {setSignIn} from '@/redux/slices/authSlice';
 import {useNavigation} from '@react-navigation/native';
 import {useState, useEffect} from 'react';
-import {useDispatch} from 'react-redux';
+import auth from '@react-native-firebase/auth';
 
 const useSignupScreen = () => {
-  const dispatch = useDispatch();
   const navigation = useNavigation();
+  const [authError, setAuthError] = useState('');
 
   const [errors, setErrors] = useState({
-    userName: '',
+    username: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -17,6 +16,7 @@ const useSignupScreen = () => {
 
   const [isFormValid, setIsFormValid] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [passwordVisible, setPasswordVisible] = useState<{
     main: boolean;
@@ -27,31 +27,68 @@ const useSignupScreen = () => {
   });
 
   const [userData, setUserData] = useState<{
-    userName: string;
+    username: string;
     email: string;
     password: string;
     confirmPassword: string;
     acceptTerms: boolean;
   }>({
-    userName: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    acceptTerms: false,
+    username: 'Mansour',
+    email: 'test@me.com',
+    password: '123456',
+    confirmPassword: '123456',
+    acceptTerms: true,
   });
 
   const togglePasswordVisibility = (type: 'main' | 'confirm') => {
     setPasswordVisible({...passwordVisible, [type]: !passwordVisible[type]});
   };
 
-  const handleSignup = () => {
-    const user = {
-      isLoggedIn: true,
-      email: userData.email,
-      userName: 'User Name',
-    };
+  const handleChangeField = (
+    key: keyof typeof userData,
+    value: string | boolean,
+  ) => {
+    // reset auth error
+    setAuthError('');
+    setUserData({...userData, [key]: value});
+  };
 
-    dispatch(setSignIn(user));
+  const handleSignup = () => {
+    setLoading(true);
+
+    // const user = {
+    //   isLoggedIn: true,
+    //   email: userData.email,
+    //   username: 'User Name',
+    // };
+
+    auth()
+      .createUserWithEmailAndPassword(userData.email, userData.password)
+      .then(() => {
+        console.log('User account created & signed in!');
+      })
+      .catch(error => {
+        if (error.code === 'auth/email-already-in-use') {
+          setErrors({
+            ...errors,
+            email: 'That email address is already in use!',
+          });
+          console.log('That email address is already in use!');
+        }
+
+        if (error.code === 'auth/invalid-email') {
+          setErrors({
+            ...errors,
+            email: 'That email address is invalid!',
+          });
+          console.log('That email address is invalid!');
+        }
+
+        console.error('Error signing up:', error);
+        setAuthError(error.message);
+        console.error(error);
+      })
+      .finally(() => setLoading(false));
   };
 
   useEffect(() => {
@@ -63,8 +100,8 @@ const useSignupScreen = () => {
     let errorsStore: any = {};
 
     // Validate email field
-    if (!userData.userName) {
-      errorsStore.userName = 'User Name is required.';
+    if (!userData.username) {
+      errorsStore.username = 'User Name is required.';
     }
 
     // Validate email field
@@ -100,7 +137,6 @@ const useSignupScreen = () => {
 
   const handleSubmit = () => {
     setIsSubmitted(true);
-
     if (isFormValid) {
       // Form is valid, perform the submission logic
       handleSignup();
@@ -113,13 +149,15 @@ const useSignupScreen = () => {
 
   return {
     navigation,
-    setUserData,
+    handleChangeField,
     userData,
     errors,
     isSubmitted,
     togglePasswordVisibility,
     handleSubmit,
     passwordVisible,
+    authError,
+    loading,
   };
 };
 export default useSignupScreen;

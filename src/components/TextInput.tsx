@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, type ViewStyle} from 'react-native';
 import {
   TextInput as RNPTextInput,
   TextInputProps as RNPTextInputProps,
@@ -9,6 +9,7 @@ import ErrorMessage from './ErrorMessage';
 import colors from '@/style/colors';
 import {TIconsNames} from '../assets/index';
 import {TColor} from '../style/types';
+
 interface TextInputProps extends Omit<RNPTextInputProps, 'style'> {
   leftIconOptions?: {
     name: TIconsNames;
@@ -20,7 +21,7 @@ interface TextInputProps extends Omit<RNPTextInputProps, 'style'> {
   touched: boolean;
   label: string;
   placeholder: string;
-
+  style?: ViewStyle;
   isPassword?: boolean;
   inputStyle?: RNPTextInputProps['style']; // Specify that inputStyle is specifically for the TextInput
 }
@@ -35,6 +36,7 @@ const TextInput: React.FC<TextInputProps> = ({
   touched,
   isPassword = false,
   inputStyle,
+  style,
   ...props
 }) => {
   const [passwordVisible, setPasswordVisible] = useState<boolean>(true);
@@ -44,8 +46,9 @@ const TextInput: React.FC<TextInputProps> = ({
   };
 
   return (
-    <View style={inputStyle}>
+    <View style={style}>
       <RNPTextInput
+        style={inputStyle}
         mode="outlined"
         outlineStyle={{borderWidth: 1}}
         outlineColor={colors.border}

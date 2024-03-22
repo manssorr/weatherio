@@ -40,7 +40,7 @@ const SigninScreen = () => {
     const user = {
       isLoggedIn: true,
       email: credentials.email,
-      userName: 'User Name',
+      username: 'User Name',
     };
 
     dispatch(setSignIn(user));

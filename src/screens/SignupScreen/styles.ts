@@ -3,30 +3,17 @@ import colors from '@/style/colors';
 import fontStyles from '@/style/fonts';
 
 const styles = StyleSheet.create({
-  safeAreaView: {
-    flex: 1,
-    backgroundColor: colors.white,
-  },
-  container: {
-    flex: 1,
-    backgroundColor: colors.white,
-    padding: 5,
-  },
   formContainer: {
     paddingHorizontal: 15,
   },
-  textInput: {
-    marginTop: 30,
-    justifyContent: 'center',
-  },
+
   forgotPassword: {
     alignSelf: 'flex-end',
     marginTop: 10,
   },
   loginButton: {
-    borderRadius: 8,
-    marginTop: 30,
-    marginBottom: 20,
+    marginTop: 20,
+    marginBottom: 5,
   },
   loginButtonContent: {
     height: 60,
@@ -62,6 +49,34 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 0.7,
     borderColor: '#E9E9E9',
+  },
+  safeAreaView: {
+    flex: 1,
+    backgroundColor: colors.white,
+  },
+  container: {
+    flex: 1,
+    backgroundColor: colors.white,
+  },
+  keyboardAvoidingView: {
+    flex: 1,
+  },
+  scrollView: {
+    paddingHorizontal: 15,
+    paddingTop: 30,
+  },
+
+  pressableCheckbox: {
+    marginTop: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  checkbox: {
+    alignSelf: 'center',
+  },
+
+  textInput: {
+    marginBottom: 20,
   },
 });
 

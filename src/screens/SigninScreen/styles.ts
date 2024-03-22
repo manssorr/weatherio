@@ -1,6 +1,5 @@
 import {StyleSheet} from 'react-native';
 import colors from '@/style/colors';
-import fontStyles from '@/style/fonts';
 
 const styles = StyleSheet.create({
   safeAreaView: {
@@ -21,19 +20,6 @@ const styles = StyleSheet.create({
   },
   forgotPassword: {
     alignSelf: 'flex-end',
-  },
-  loginButton: {
-    borderRadius: 8,
-    marginTop: 30,
-    marginBottom: 20,
-  },
-  loginButtonContent: {
-    height: 60,
-  },
-  loginButtonLabel: {
-    color: colors.white,
-    fontSize: fontStyles.md.fontSize,
-    fontWeight: 'bold',
   },
   dividerContainer: {
     flexDirection: 'row',
@@ -61,6 +47,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 0.7,
     borderColor: '#E9E9E9',
+  },
+  signinButton: {
+    marginTop: 20,
+    marginBottom: 5,
   },
 });
 

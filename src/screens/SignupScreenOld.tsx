@@ -28,7 +28,7 @@ const SignupScreen = () => {
   const navigation = useNavigation();
 
   const [errors, setErrors] = useState({
-    userName: '',
+    username: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -47,13 +47,13 @@ const SignupScreen = () => {
   });
 
   const [userData, setUserData] = useState<{
-    userName: string;
+    username: string;
     email: string;
     password: string;
     confirmPassword: string;
     acceptTerms: boolean;
   }>({
-    userName: '',
+    username: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -68,7 +68,7 @@ const SignupScreen = () => {
     const user = {
       isLoggedIn: true,
       email: userData.email,
-      userName: 'User Name',
+      username: 'User Name',
     };
 
     dispatch(setSignIn(user));
@@ -83,8 +83,8 @@ const SignupScreen = () => {
     let errorsStore: any = {};
 
     // Validate email field
-    if (!userData.userName) {
-      errorsStore.userName = 'User Name is required.';
+    if (!userData.username) {
+      errorsStore.username = 'User Name is required.';
     }
 
     // Validate email field
@@ -145,11 +145,11 @@ const SignupScreen = () => {
             bgImage={assets.images.hero}
           />
           <ScrollView style={styles.formContainer}>
-            {/* userName Input */}
+            {/* username Input */}
             <TextInput
-              onChangeText={text => setUserData({...userData, userName: text})}
-              error={isSubmitted && !!errors.userName}
-              value={userData.userName}
+              onChangeText={text => setUserData({...userData, username: text})}
+              error={isSubmitted && !!errors.username}
+              value={userData.username}
               outlineColor={colors.border}
               placeholder="Enter your name"
               activeOutlineColor={colors.primary}
@@ -159,12 +159,12 @@ const SignupScreen = () => {
               label="User name"
               style={{marginTop: 20, justifyContent: 'center'}}
             />
-            {isSubmitted && !!errors.userName && (
+            {isSubmitted && !!errors.username && (
               <Text
                 color="red"
                 fontVariant="sm"
                 style={{alignSelf: 'flex-start', marginTop: 4}}>
-                {errors.userName}
+                {errors.username}
               </Text>
             )}
 
