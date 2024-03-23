@@ -1,70 +1,85 @@
 import {NativeModules} from 'react-native';
+
+import {Platform} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useHeaderHeight} from '@react-navigation/elements';
-// import {useBottomTabBarHeight} from '@react-navigation/bottom-tabs';
-import DeviceInfo from 'react-native-device-info';
 
 import DEVICE from './device';
 const {StatusBarManager} = NativeModules;
 
 type CustomInsets = {
   safeAreaInsets: ReturnType<typeof useSafeAreaInsets>;
-
+  device: typeof DEVICE;
   top: number;
   bottom: number;
   right: number;
   left: number;
-  // extra
   statusBarHeight: number;
   navigationHeaderHeight: number;
   navigationBarHeight: number;
-
-  // actual
   width: number;
   height: number;
 };
 
-/**
- * useInsets hook
- *
- * @returns {CustomInsets} custom insets
- * @description to use it run
- * yarn add react-native-safe-area-context @react-navigation/elements
- *
- */
 const useInsets = (): CustomInsets => {
   const safeAreaInsets = useSafeAreaInsets();
-  // top
-  const statusBarHeight = DEVICE.isIOS ? 20 : StatusBarManager.HEIGHT;
-  // const notchHeight = safeAreaInsets.top - statusBarHeight
+  const headerHeight = useHeaderHeight();
 
-  const navigationHeaderHeight = useHeaderHeight() - safeAreaInsets.top;
+  if (Platform.OS === 'ios') {
+    // top
+    const statusBarHeight = 20;
+    const navigationHeaderHeight = 0;
 
-  // bottom
-  const androidNavigationBarHeight =
-    DEVICE.SCREEN_HEIGHT - DEVICE.WINDOW_HEIGHT;
+    // bottom
+    const navigationBarHeight = safeAreaInsets.bottom;
 
-  const navigationBarHeight = DEVICE.isIOS
-    ? safeAreaInsets.bottom
-    : androidNavigationBarHeight;
+    const top = headerHeight ? 0 : safeAreaInsets.top;
+    console.log(`Iosheader`, headerHeight);
+    console.log(`Toop`, safeAreaInsets.top);
 
-  const top = navigationHeaderHeight + safeAreaInsets.top;
-  const bottom = navigationBarHeight;
+    const topToBeCut = headerHeight ? headerHeight : safeAreaInsets.top;
+    return {
+      safeAreaInsets,
+      device: DEVICE,
+      top,
+      bottom: navigationBarHeight,
+      right: safeAreaInsets.right,
+      left: safeAreaInsets.left,
+      statusBarHeight,
+      navigationHeaderHeight,
+      navigationBarHeight,
+      width: DEVICE.SCREEN_WIDTH - safeAreaInsets.left - safeAreaInsets.right,
+      height: DEVICE.SCREEN_HEIGHT - safeAreaInsets.bottom - topToBeCut,
+    };
+  } else {
+    // top
+    const statusBarHeight = StatusBarManager.HEIGHT;
+    const navigationHeaderHeight = headerHeight;
 
-  return {
-    safeAreaInsets,
-    top,
-    bottom,
-    right: safeAreaInsets.right,
-    left: safeAreaInsets.left,
+    // bottom
+    const androidNavigationBarHeight =
+      DEVICE.SCREEN_HEIGHT - DEVICE.WINDOW_HEIGHT;
 
-    statusBarHeight,
-    navigationHeaderHeight,
-    navigationBarHeight,
+    const top = navigationHeaderHeight + safeAreaInsets.top;
+    // console.log(`top`, top);
+    const bottom = androidNavigationBarHeight;
 
-    width: DEVICE.SCREEN_WIDTH - safeAreaInsets.left - safeAreaInsets.right,
-    height: DEVICE.SCREEN_HEIGHT - top - bottom,
-  };
+    return {
+      safeAreaInsets,
+      device: DEVICE,
+      top,
+      bottom,
+      right: safeAreaInsets.right,
+      left: safeAreaInsets.left,
+
+      statusBarHeight,
+      navigationHeaderHeight,
+      navigationBarHeight: androidNavigationBarHeight,
+
+      width: DEVICE.SCREEN_WIDTH - safeAreaInsets.left - safeAreaInsets.right,
+      height: DEVICE.SCREEN_HEIGHT - top - bottom,
+    };
+  }
 };
 
 export default useInsets;

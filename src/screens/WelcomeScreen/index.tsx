@@ -8,7 +8,7 @@ import fontStyles from '@/style/fonts';
 import {Button} from 'react-native-paper';
 import TextGradient from '@furkankaya/react-native-linear-text-gradient';
 import {useEffect} from 'react';
-import DEVICE, {screenGrid} from '@/constants/device';
+import DEVICE from '@/constants/device';
 import useSmoothRotation from '@/style/Animations/useSmoothRotation';
 import {useDragAndRelease} from '@/style/Animations/useDragAndRelease';
 import {useButtonAnimation} from '@/style/Animations/helpersAmin';

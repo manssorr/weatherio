@@ -1,9 +1,4 @@
-//@ts-nocheck
-import DEVICE from '@/constants/device';
-import {StyleSheet, Text, View, StatusBar} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {initialWindowMetrics} from 'react-native-safe-area-context';
-import {useHeaderHeight} from '@react-navigation/elements';
+import {StyleSheet, Text, View} from 'react-native';
 import useInsets from '@/constants/useInsets';
 import {useScreenGrid} from '@/constants/useGrid';
 
@@ -105,8 +100,9 @@ const colors = {
 };
 
 const PosView = ({y, x}: {y: Y, x: X}) => {
-  const {height} = useInsets();
-  const {unitHeight, unitWidth, left, top} = useScreenGrid({x, y}, height);
+  const all = useInsets();
+  const {unitHeight, unitWidth, left, top} = useScreenGrid({x, y}, all.height);
+  const iosFixture = all.device.isIOS ? all.top : 0;
 
   return (
     <View
@@ -116,9 +112,8 @@ const PosView = ({y, x}: {y: Y, x: X}) => {
         width: unitWidth,
         height: unitHeight,
         left,
-        top,
+        top: top + iosFixture,
         backgroundColor: colors[y][x],
-        // backgroundColor: 'red',
         justifyContent: 'center',
         alignItems: 'center',
       }}>
@@ -131,69 +126,15 @@ const PosView = ({y, x}: {y: Y, x: X}) => {
 };
 
 const GridView = () => {
-  const insets = useSafeAreaInsets();
-  const NaviBarHeight = DEVICE.SCREEN_HEIGHT - DEVICE.WINDOW_HEIGHT;
-  const metrics = initialWindowMetrics;
-  const headerHeight = useHeaderHeight();
-  const all = useInsets();
-
-  const fuc = (
-    display: 'M2101K9AG' | 'iPhone 15 Pro' | 'Nokia T20' | 'all' = 'all',
-  ) => {
-    if (display === DEVICE.MODEL || display === 'all') {
-      console.log(`---------`, DEVICE.MODEL, '---------');
-      console.log(`all`, JSON.stringify(all, null, 2));
-
-      console.log(`${DEVICE.isIOS ? 'ios' : 'android'} insets: `, insets);
-      console.log(
-        `${DEVICE.isIOS ? 'ios' : 'android'} metrics: `,
-        metrics.insets,
-      );
-
-      console.log(
-        `${DEVICE.isIOS ? 'ios' : 'android'} NaviBarHeight: `,
-        NaviBarHeight,
-      );
-      console.log(
-        `${DEVICE.isIOS ? 'ios' : 'android'} StatusBar: `,
-        StatusBar.currentHeight,
-      );
-      console.log(
-        `${DEVICE.isIOS ? 'ios' : 'android'} Screen-wind: `,
-        DEVICE.SCREEN_HEIGHT - DEVICE.WINDOW_HEIGHT,
-      );
-      console.log(
-        `${DEVICE.isIOS ? 'ios' : 'android'} headerHeight : `,
-        headerHeight,
-      );
-
-      console.log(
-        `${DEVICE.isIOS ? 'ios' : 'android'} DEVICE: `,
-        JSON.stringify(DEVICE, null, 2),
-      );
-      console.log(`---------`, '', '---------');
-      console.log(`---------`, '------', '---------');
-    }
-  };
-
-  fuc('iPhone 15 Pro');
-
   return (
     <View
       style={{
         flex: 1,
         flexDirection: 'column',
-        backgroundColor: 'rgba(0,0,0,0.5)',
-        borderWidth: 1,
-        borderColor: 'red',
       }}>
-      {gridMatrix.map((rows, y) => {
-        // ignore zeroth row
-        return rows.map((x, j) => {
-          // ignore zeroth col
-          return <PosView key={`${y}-${j}`} x={x} y={y} />;
-        });
-      })}
+      {gridMatrix.map((rows, y) =>
+        rows.map((x, j) => <PosView key={`${y}-${j}`} x={x} y={y} />),
+      )}
     </View>
   );
 };
