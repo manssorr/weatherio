@@ -2,7 +2,7 @@ import React from 'react';
 import {StatusBar} from 'react-native';
 import {PersistGate} from 'redux-persist/integration/react';
 
-import {PaperProvider, configureFonts} from 'react-native-paper';
+import {PaperProvider, configureFonts, DefaultTheme} from 'react-native-paper';
 import colors from '@/style/colors';
 import {Provider} from 'react-redux';
 import {persistor, store} from '@/redux/store';
@@ -12,22 +12,37 @@ const fontConfig = {
   fontFamily: 'Poppins-Regular',
 };
 
+const theme = {
+  ...DefaultTheme,
+  fonts: configureFonts({config: fontConfig}),
+
+  colors: {
+    background: colors.white,
+    primary: colors.primary,
+    error: colors.red,
+    surface: colors.secondaryLightText,
+    tertiary: colors.darkText,
+    backdrop: 'rgba(0, 0, 0, 0.3)',
+    elevation: {
+      level0: 'transparent',
+      // Note: Color values with transparency cause RN to transfer shadows to children nodes
+      // instead of View component in Surface. Providing solid background fixes the issue.
+      // Opaque color values generated with `palette.primary99` used as background
+      level1: 'rgb(247, 243, 249)', // palette.primary40, alpha 0.05
+      level2: 'rgb(243, 237, 246)', // palette.primary40, alpha 0.08
+      level3: 'rgb(238, 232, 244)', // palette.primary40, alpha 0.11
+      level4: 'rgb(236, 230, 243)', // palette.primary40, alpha 0.12
+      level5: 'rgb(233, 227, 241)', // palette.primary40, alpha 0.14
+    },
+  },
+  roundness: 10,
+};
+
 function App(): React.JSX.Element {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <PaperProvider
-          theme={{
-            fonts: configureFonts({config: fontConfig}),
-            colors: {
-              background: colors.white,
-              primary: colors.primary,
-              error: colors.red,
-              placeholder: colors.secondaryLightText,
-              text: colors.darkText,
-            },
-            roundness: 10,
-          }}>
+        <PaperProvider theme={theme}>
           <AppRoute />
         </PaperProvider>
         <StatusBar barStyle="default" />

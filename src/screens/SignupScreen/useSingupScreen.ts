@@ -66,6 +66,11 @@ const useSignupScreen = () => {
       .createUserWithEmailAndPassword(userData.email, userData.password)
       .then(() => {
         console.log('User account created & signed in!');
+
+        // set up displayed name
+        auth().currentUser?.updateProfile({
+          displayName: userData.username,
+        });
       })
       .catch(error => {
         if (error.code === 'auth/email-already-in-use') {

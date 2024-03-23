@@ -49,7 +49,8 @@ const SignupScreen = () => {
             <ScrollView style={styles.scrollView}>
               <>
                 <TextInputApp
-                  style={styles.textInput}
+                  style={[styles.textInput]}
+                  // inputStyle={{paddingTop: 10}}
                   onChangeText={text => handleChangeField('username', text)}
                   errorMessage={errors.username}
                   value={userData.username}

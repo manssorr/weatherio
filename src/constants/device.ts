@@ -1,18 +1,30 @@
 import {Dimensions, Platform} from 'react-native';
+import DeviceInfo from 'react-native-device-info';
 
 interface IDevice {
+  MODEL: string;
   Platform: string;
+  isIOS: boolean;
+
   SCREEN_HEIGHT: number;
   SCREEN_WIDTH: number;
-  isIOS: boolean;
-  STATUSBAR_HEIGHT: number;
+  WINDOW_HEIGHT: number;
+  WINDOW_WIDTH: number;
+
+  navigationBarHeight: number;
 }
+
 const DEVICE: IDevice = {
-  Platform: Platform.OS,
-  isIOS: Platform.OS === 'ios',
   SCREEN_HEIGHT: Dimensions.get('screen').height,
   SCREEN_WIDTH: Dimensions.get('screen').width,
-  STATUSBAR_HEIGHT: Platform.OS === 'ios' ? 20 : 0,
+  WINDOW_HEIGHT: Dimensions.get('window').height,
+  WINDOW_WIDTH: Dimensions.get('window').width,
+
+  navigationBarHeight:
+    Dimensions.get('screen').height - Dimensions.get('window').height,
+  MODEL: DeviceInfo.getModel(),
+  Platform: Platform.OS,
+  isIOS: Platform.OS === 'ios',
 };
 
 export default DEVICE;

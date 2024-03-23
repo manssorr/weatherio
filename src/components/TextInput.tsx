@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, type ViewStyle} from 'react-native';
+import {StyleSheet, View, type ViewProps, type ViewStyle} from 'react-native';
 import {
   TextInput as RNPTextInput,
   TextInputProps as RNPTextInputProps,
@@ -21,7 +21,7 @@ interface TextInputProps extends Omit<RNPTextInputProps, 'style'> {
   touched: boolean;
   label: string;
   placeholder: string;
-  style?: ViewStyle;
+  style?: ViewProps['style'];
   isPassword?: boolean;
   inputStyle?: RNPTextInputProps['style']; // Specify that inputStyle is specifically for the TextInput
 }

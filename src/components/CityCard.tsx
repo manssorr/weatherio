@@ -1,5 +1,12 @@
 import assets from '@/assets';
-import {ImageBackground, StyleSheet, View, type ViewProps} from 'react-native';
+import {
+  ImageBackground,
+  StyleSheet,
+  TouchableOpacity,
+  TouchableOpacityBase,
+  View,
+  type ViewProps,
+} from 'react-native';
 import Icon from './Icon';
 import Text from './Text';
 import DEVICE from '@/constants/device';
@@ -10,11 +17,15 @@ interface IProps {
   date: string;
   coverImage?: any;
   style?: ViewProps['style'];
+  onPress?: () => void;
 }
 
 const CityCard = (props: IProps): React.ReactElement<IProps> => {
   return (
-    <View style={[styles.container, props.style]}>
+    <TouchableOpacity
+      activeOpacity={0.8}
+      onPress={props.onPress}
+      style={[styles.container, props.style]}>
       {/* Upper */}
       <View
         style={{
@@ -68,7 +79,7 @@ const CityCard = (props: IProps): React.ReactElement<IProps> => {
           </Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

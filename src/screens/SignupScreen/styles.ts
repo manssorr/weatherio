@@ -62,10 +62,11 @@ const styles = StyleSheet.create({
   },
   keyboardAvoidingView: {
     flex: 1,
+    // marginTop: 15,
   },
   scrollView: {
     paddingHorizontal: 15,
-    marginTop: 10,
+    // marginTop: 10,
     paddingBottom: 10,
   },
 

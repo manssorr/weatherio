@@ -15,6 +15,8 @@ interface IProps {
   wrapperStyle?: ViewStyle;
 }
 
+const HERO_HEIGHT = DEVICE.SCREEN_HEIGHT / 4;
+
 const Hero = ({
   title,
   icon,
@@ -24,19 +26,13 @@ const Hero = ({
   ...props
 }: IProps): React.ReactElement<IProps> => {
   return (
-    <View
-      style={[
-        {
-          height: DEVICE.SCREEN_HEIGHT / 4,
-        },
-        wrapperStyle,
-      ]}>
+    <View style={[styles.hero, wrapperStyle]}>
       <ImageBackground
         source={bgImage}
         imageStyle={styles.hero_baground}
         resizeMode="cover"
       />
-      <View style={styles.hero_container}>
+      <View style={styles.hero_content_container}>
         {icon && (
           <View style={styles.hero_icon}>
             <Icon name={icon} color="white" onPress={onPress} />
@@ -53,15 +49,18 @@ const Hero = ({
 export default Hero;
 
 const styles = StyleSheet.create({
+  hero: {
+    height: HERO_HEIGHT,
+  },
   hero_baground: {
-    height: DEVICE.SCREEN_HEIGHT / 4,
+    height: HERO_HEIGHT,
     borderTopRightRadius: 20,
     borderTopLeftRadius: 3,
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 3,
   },
 
-  hero_container: {
+  hero_content_container: {
     marginTop: 30,
     marginLeft: 20,
   },
