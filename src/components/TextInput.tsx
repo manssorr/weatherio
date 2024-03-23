@@ -50,10 +50,13 @@ const TextInput: React.FC<TextInputProps> = ({
       <RNPTextInput
         cursorColor={colors.primary}
         selectionColor={colors.primary}
-        style={inputStyle}
+        style={{
+          ...inputStyle,
+          backgroundColor: colors.white,
+        }}
         mode="outlined"
         textColor={colors.black}
-        outlineStyle={{borderWidth: 1}}
+        accessibilityIgnoresInvertColors={true}
         outlineColor={colors.border}
         activeOutlineColor={colors.primary}
         placeholderTextColor={colors.secondaryLightText}

@@ -2,7 +2,12 @@ import React from 'react';
 import {StatusBar} from 'react-native';
 import {PersistGate} from 'redux-persist/integration/react';
 
-import {PaperProvider, configureFonts, DefaultTheme} from 'react-native-paper';
+import {
+  PaperProvider,
+  configureFonts,
+  DefaultTheme,
+  adaptNavigationTheme,
+} from 'react-native-paper';
 import colors from '@/style/colors';
 import {Provider} from 'react-redux';
 import {persistor, store} from '@/redux/store';
@@ -20,6 +25,9 @@ const theme = {
     background: colors.white,
     primary: colors.primary,
     error: colors.red,
+
+    inversePrimary: colors.red,
+
     surface: colors.secondaryLightText,
     tertiary: colors.darkText,
     backdrop: 'rgba(0, 0, 0, 0.3)',
@@ -35,14 +43,15 @@ const theme = {
       level5: 'rgb(233, 227, 241)', // palette.primary40, alpha 0.14
     },
   },
-  roundness: 10,
+  roundness: 5,
 };
+const {LightTheme} = adaptNavigationTheme({reactNavigationDark: theme});
 
 function App(): React.JSX.Element {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <PaperProvider theme={theme}>
+        <PaperProvider theme={LightTheme}>
           <AppRoute />
         </PaperProvider>
         <StatusBar barStyle="default" />

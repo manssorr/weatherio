@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   textInput: {
-    marginBottom: 5,
+    // marginBottom: 5,
   },
   forgotPassword: {
     alignSelf: 'flex-end',
