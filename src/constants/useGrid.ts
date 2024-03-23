@@ -51,7 +51,7 @@ export const useScreenGrid = (
   return {
     unitWidth: xObj[1],
     unitHeight: yObj[1],
-    top: yObj[point.y],
-    left: xObj[point.x],
+    top: xObj[point.x],
+    left: yObj[point.y],
   };
 };

@@ -13,34 +13,35 @@ import useSmoothRotation from '@/style/Animations/useSmoothRotation';
 import {useDragAndRelease} from '@/style/Animations/useDragAndRelease';
 import {useButtonAnimation} from '@/style/Animations/helpersAmin';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
-import GridView from '@/components/GridView';
+import {useScreenGrid} from '@/constants/useGrid';
+import useInsets from '@/constants/useInsets';
 
 const Welcome = ({}) => {
-  return <GridView />;
-  const insets = useSafeAreaInsets();
+  const all = useInsets();
+  const Icon1 = useScreenGrid({x: 1, y: 0}, all.height);
+  const {panResponder: panResponder1, pan: pan1} = useDragAndRelease();
+  const {panResponder: panResponder2, pan: pan2} = useDragAndRelease();
+  const {panResponder: panResponder3, pan: pan3} = useDragAndRelease();
+  const {panResponder: panResponder4, pan: pan4} = useDragAndRelease();
+
+  const Icon2 = useScreenGrid({x: 4, y: 1}, all.height);
+  const Icon3 = useScreenGrid({x: 2, y: 2}, all.height);
+  const Icon4 = useScreenGrid({x: 4, y: 5}, all.height);
+
   const navigation = useNavigation();
   const iconSpin = useSmoothRotation();
   const textSpin = useSmoothRotation(2, 250);
-  const {panResponder, pan} = useDragAndRelease();
   const {buttonAnimation, animatedStyles} = useButtonAnimation(
     1000,
     'in',
     'CombinationsOutExp',
   );
 
-  console.log(
-    '------------------------',
-    DEVICE.MODEL,
-    '------------------------',
-  );
-  console.log(`insets`, insets);
-  console.log(JSON.stringify(DEVICE, null, 2));
-  console.log(JSON.stringify(screenGrid, null, 2));
-
   useEffect(() => {
     buttonAnimation.start();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   return (
     <LinearGradient
       style={{
@@ -53,63 +54,115 @@ const Welcome = ({}) => {
         <View style={{flex: 1}}>
           <View style={{flex: 1}}>
             <Animated.Image
-              {...panResponder.panHandlers}
+              {...panResponder1.panHandlers}
               source={require('../../assets/images/cloud-stars-night.png')}
               style={{
                 width: 120,
                 height: 100,
+                position: 'absolute',
+
                 transform: [
-                  {translateX: screenGrid().x[1]},
-                  {translateY: screenGrid().y[1]},
                   // Assuming you want to start from an initial offset and add the drag displacement to it
-                  // {translateX: Animated.add(pan.x, new Animated.Value(40))},
-                  // {translateY: Animated.add(pan.y, new Animated.Value(250))},
+                  {
+                    translateX: Animated.add(
+                      pan1.x,
+                      new Animated.Value(Icon1.top),
+                    ),
+                  },
+                  {
+                    translateY: Animated.add(
+                      pan1.y,
+                      new Animated.Value(Icon1.left + 10),
+                    ),
+                  },
                   {rotate: iconSpin}, // Assuming `spin` is an animated value for rotation
                 ],
               }}
             />
-
-            {/* <Animated.Image
+            <Animated.Image
+              {...panResponder2.panHandlers}
               source={require('../../assets/images/moon-cloud-light.png')}
               style={{
                 width: 100,
                 height: 130,
+                position: 'absolute',
+
                 transform: [
-                  // {translateX: 110},
-                  // {translateY: -150},
-                  {rotate: iconSpin},
+                  // Assuming you want to start from an initial offset and add the drag displacement to it
+                  {
+                    translateX: Animated.add(
+                      pan2.x,
+                      new Animated.Value(Icon2.top),
+                    ),
+                  },
+                  {
+                    translateY: Animated.add(
+                      pan2.y,
+                      new Animated.Value(Icon2.left),
+                    ),
+                  },
+                  {rotate: iconSpin}, // Assuming `spin` is an animated value for rotation
                 ],
               }}
-            /> */}
-            {/* <Animated.Image
+            />
+            <Animated.Image
+              {...panResponder3.panHandlers}
               source={require('../../assets/images/cloud-sun.png')}
               style={{
                 width: 120,
+                position: 'absolute',
+
                 height: 100,
                 transform: [
-                  // {translateX: 230},
-                  // {translateY: -160},
-                  {rotate: iconSpin},
+                  // Assuming you want to start from an initial offset and add the drag displacement to it
+                  {
+                    translateX: Animated.add(
+                      pan3.x,
+                      new Animated.Value(Icon3.top),
+                    ),
+                  },
+                  {
+                    translateY: Animated.add(
+                      pan3.y,
+                      new Animated.Value(Icon3.left),
+                    ),
+                  },
+                  {rotate: iconSpin}, // Assuming `spin` is an animated value for rotation
                 ],
               }}
-            /> */}
-            {/* <Animated.Image
+            />
+            <Animated.Image
+              {...panResponder4.panHandlers}
               source={require('../../assets/images/starts-night.png')}
               style={{
                 width: 100,
                 height: 90,
+                position: 'absolute',
+                zIndex: 10,
                 transform: [
-                  // {translateX: 230},
-                  // {translateY: 300},
-                  {rotate: iconSpin},
+                  // Assuming you want to start from an initial offset and add the drag displacement to it
+                  {
+                    translateX: Animated.add(
+                      pan4.x,
+                      new Animated.Value(Icon4.top),
+                    ),
+                  },
+                  {
+                    translateY: Animated.add(
+                      pan4.y,
+                      new Animated.Value(Icon4.left),
+                    ),
+                  },
+                  {rotate: iconSpin}, // Assuming `spin` is an animated value for rotation
                 ],
               }}
-            /> */}
+            />
           </View>
           {/* content  */}
           <View
             style={{
               paddingHorizontal: 22,
+              marginBottom: 22,
               justifyContent: 'center',
               width: '100%',
             }}>
