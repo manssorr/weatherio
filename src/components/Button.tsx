@@ -17,7 +17,11 @@ const Button = ({
 }: IProps): React.JSX.Element => {
   return (
     <RNMButton
-      style={[styles.button, props.disabled && styles.disabledButton, style]}
+      style={[
+        styles.button,
+        (props.disabled || props.loading) && styles.disabledButton,
+        style,
+      ]}
       contentStyle={styles.buttonContent}
       labelStyle={[
         styles.buttonLabel,
@@ -25,6 +29,7 @@ const Button = ({
       ]}
       mode="contained"
       onPress={onPress}
+      disabled={props.disabled || props.loading}
       {...props}>
       {title}
     </RNMButton>
