@@ -54,8 +54,8 @@ const HomeScreen = (): React.ReactElement<IProps> => {
 
   const fetchWeather = async () => {
     setLoading(true);
-    const citiesToFetch = ['Alexandria'];
-    // const citiesToFetch = ['Cairo', 'Mansoura', 'Alexandria'];
+    // const citiesToFetch = ['Alexandria'];
+    const citiesToFetch = ['Cairo', 'Mansoura', 'Alexandria'];
 
     try {
       const responses = await Promise.all(
