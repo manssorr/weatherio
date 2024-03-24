@@ -14,6 +14,7 @@ const styles = StyleSheet.create({
   formContainer: {
     paddingHorizontal: 15,
     marginTop: 30,
+    gap: 10,
   },
   textInput: {
     // marginBottom: 5,

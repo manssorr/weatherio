@@ -19,8 +19,9 @@ import Button from '@/components/Button';
 import {isObjectEmpty} from '@/utils/helper';
 import styles from './styles';
 import DEVICE from '@/constants/device';
+import type {IProps} from './types';
 
-const SignupScreen = () => {
+const SignupScreen = ({}: IProps): React.ReactElement<IProps> => {
   const {
     navigation,
     authError,

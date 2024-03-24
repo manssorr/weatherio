@@ -1,8 +1,17 @@
 import type {RouteProp as RouteProp} from '@react-navigation/native';
-import {AuthStackParamList} from './AuthNavigator';
 import type {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
-export type RootStackParamList = AuthStackParamList; // & HomeStackParamList;
+export type AuthStackParamList = {
+  Welcome: undefined; // No parameters expected for WelcomeScreen
+  Signin: undefined; // No parameters expected for SigninScreen
+  Signup: undefined; // No parameters expected for SignupScreen
+};
+
+export type HomeStackParamList = {
+  Home: undefined; // No parameters expected for HomeScreen
+};
+
+export type RootStackParamList = AuthStackParamList & HomeStackParamList; // & SomeStackParamList;
 
 declare global {
   namespace ReactNavigation {

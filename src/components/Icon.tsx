@@ -21,7 +21,7 @@ interface IProps {
 
 const Icon = (props: IProps): React.ReactElement<IProps> => {
   const size = props.size || 24;
-  const color = props.color ? colors[props.color] : colors.white;
+  const color = props.color ? colors[props.color] : colors.black;
 
   const Wrapper = props.onPress ? TouchableOpacity : View;
   return (

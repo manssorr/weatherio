@@ -10,8 +10,9 @@ import styles from './styles';
 import ErrorMessage from '@/components/ErrorMessage';
 import Button from '@/components/Button';
 import {isObjectEmpty} from '@/utils/helper';
+import type {IProps} from './types';
 
-const SigninScreen = () => {
+const SigninScreen = ({}: IProps): React.ReactElement<IProps> => {
   const {
     navigation,
     errors,
@@ -21,6 +22,7 @@ const SigninScreen = () => {
     setCredentials,
     handleSubmit,
     loading,
+    onGoogleButtonPress,
   } = useSigninScreen();
 
   return (
@@ -99,9 +101,10 @@ const SigninScreen = () => {
             {/* Icons with extracted styles */}
             {/* Google, Facebook, and X icons remain unchanged in terms of functionality */}
             <Icon
-              onPress={() =>
-                Alert.alert('Sign in with Google will be added soon')
-              }
+              onPress={() => {
+                if (__DEV__) onGoogleButtonPress();
+                else Alert.alert('Sign in with Google will be added soon');
+              }}
               name="google"
               noColor
               style={styles.icon}

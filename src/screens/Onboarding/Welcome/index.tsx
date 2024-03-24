@@ -9,13 +9,9 @@ import TextGradient from '@furkankaya/react-native-linear-text-gradient';
 import DEVICE from '@/constants/device';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import useWelcomeScreen from './useWelcomScreen';
-import type {StackScreenProps} from '@react-navigation/stack';
-import type {AuthStackParamList} from '@/navigation/AuthNavigator';
-import type {withNavigationProps} from '@/navigation/types';
+import type {IProps} from './types';
 
-type IProps = withNavigationProps<'Welcome'>;
-
-const Welcome = ({}): React.ReactElement<IProps> => {
+const Welcome = ({}: IProps): React.ReactElement<IProps> => {
   const {
     icon1,
     icon2,
@@ -163,6 +159,7 @@ const Welcome = ({}): React.ReactElement<IProps> => {
                 fontVariant="md"
                 color="white"
                 style={{
+                  fontFamily: fontStyles.lg.fontFamily,
                   marginVertical: 4,
                 }}>
                 Welcome to Weatherio. Your personal weather app.

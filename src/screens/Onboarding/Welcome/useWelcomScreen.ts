@@ -32,6 +32,9 @@ const useWelcomeScreen = () => {
     buttonAnimation.start();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  useEffect(() => {
+    buttonAnimation.start();
+  }, [buttonAnimation]);
 
   const icon1 = {
     top: Icon1.top,

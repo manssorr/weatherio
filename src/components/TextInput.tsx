@@ -16,6 +16,7 @@ interface TextInputProps extends Omit<RNPTextInputProps, 'style'> {
     color: TColor;
     size?: number;
   };
+  useNativeIcon?: boolean;
   errorMessage: string;
   onChangeText: (text: string) => void;
   touched: boolean;
@@ -37,6 +38,7 @@ const TextInput: React.FC<TextInputProps> = ({
   isPassword = false,
   inputStyle,
   style,
+  useNativeIcon = false,
   ...props
 }) => {
   const [passwordVisible, setPasswordVisible] = useState<boolean>(true);
@@ -48,18 +50,26 @@ const TextInput: React.FC<TextInputProps> = ({
   return (
     <View style={style}>
       <RNPTextInput
+        mode="outlined"
         cursorColor={colors.primary}
         selectionColor={colors.primary}
-        style={{
-          ...inputStyle,
-          backgroundColor: colors.white,
-        }}
-        mode="outlined"
         textColor={colors.black}
+        style={[
+          inputStyle,
+          {
+            backgroundColor: colors.white,
+          },
+        ]}
         accessibilityIgnoresInvertColors={true}
         outlineColor={colors.border}
         activeOutlineColor={colors.primary}
         placeholderTextColor={colors.secondaryLightText}
+        outlineStyle={{borderWidth: 1}}
+        contentStyle={{
+          fontFamily: 'Poppins-Regular',
+          fontSize: 16,
+          lineHeight: 24,
+        }}
         left={
           leftIconOptions && (
             <RNPTextInput.Icon
@@ -76,12 +86,18 @@ const TextInput: React.FC<TextInputProps> = ({
         right={
           isPassword && (
             <RNPTextInput.Icon
-              icon={() => (
-                <Icon
-                  name={passwordVisible ? 'eye' : 'eye-off'}
-                  color="black"
-                />
-              )}
+              icon={
+                useNativeIcon
+                  ? passwordVisible
+                    ? 'eye'
+                    : 'eye-off'
+                  : () => (
+                      <Icon
+                        name={passwordVisible ? 'eye' : 'eye-off'}
+                        color="black"
+                      />
+                    )
+              }
               onPress={togglePasswordVisibility}
             />
           )
