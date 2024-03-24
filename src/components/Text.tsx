@@ -1,4 +1,4 @@
-import {StyleSheet, Text as RNText, View, type TextProps} from 'react-native';
+import {Text as RNText, View, type TextProps} from 'react-native';
 import {
   TFontWeight,
   TFontSize,
@@ -37,9 +37,12 @@ const Text = (props: IProps): React.ReactElement<IProps> => {
   const {fontVariant = 'md'} = props;
 
   const customStyles = {
-    color: colors.black,
-    fontSize: fontStyles[fontVariant].fontSize,
-    fontFamily: fontStyles[fontVariant].fontFamily,
+    // @ts-ignore
+    color: props?.style?.color || colors.black,
+    // @ts-ignore
+    fontSize: props?.style?.fontSize || fontStyles[fontVariant].fontSize,
+    // @ts-ignore
+    fontFamily: props?.style?.fontFamily || fontStyles[fontVariant].fontFamily,
     textAlign: 'left',
   };
   if (props.color) {
@@ -64,6 +67,7 @@ const Text = (props: IProps): React.ReactElement<IProps> => {
     <View>
       <RNText
         {...props}
+        // @ts-ignore
         style={[fontStyles[fontVariant], props.style, customStyles]}>
         {props.children}
       </RNText>
