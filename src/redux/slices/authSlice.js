@@ -37,4 +37,5 @@ export const selectIsLoggedIn = state => state.auth.isLoggedIn;
 export const selectEmail = state => state.auth.email;
 export const selectUsername = state => state.auth.username;
 
-export default authSlice.reducer;
+const authReducer = authSlice.reducer;
+export default authReducer;

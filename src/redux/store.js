@@ -12,6 +12,7 @@ import {
 } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import thunk from 'redux-thunk';
+import cityReducer from './slices/citySlice';
 
 const persistConfig = {
   key: 'root',
@@ -21,6 +22,7 @@ const persistConfig = {
 
 export const rootReducer = combineReducers({
   auth: authReducer,
+  city: cityReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -1,28 +1,31 @@
 import {setSignOut} from '@/redux/slices/authSlice';
 import {useEffect, useState} from 'react';
 import {Alert} from 'react-native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {getCelsius} from '@/utils/helper';
 import auth from '@react-native-firebase/auth';
-import type {ICity} from './types';
+import type {ICity} from '@/utils/commonTypes';
+import {selectCities} from '@/redux/slices/citySlice';
 
 const useHomeScreen = () => {
   const dispatch = useDispatch();
+  const selectedCities = useSelector(selectCities);
+
   const user = auth().currentUser;
+
   const [loading, setLoading] = useState<boolean>(false);
   const [cities, setCities] = useState<ICity[] | []>([]);
+  const [error, setError] = useState<string>('');
 
-  const [showDialog, setShowDialog] = useState<boolean>(false);
+  const [showCityDialog, setShowCityDialog] = useState<boolean>(false);
   const [openedCityIndex, setOpenedCityIndex] = useState<number>(0);
-  const [curCity, setCurCity] = useState<ICity | null>(null);
+  const [curCity, setCurCity] = useState<ICity | undefined>(undefined);
 
-  useEffect(() => {
-    setCurCity(cities[openedCityIndex]);
-  }, [cities, openedCityIndex]);
+  const [showAddCityDialog, setShowAddCityDialog] = useState<boolean>(false);
 
   const getWeather = async (cityName: string) => {
     try {
-      const api = 'd270e786016642129ab190318242103'; //TODO: move to env variables
+      const api = 'd270e78601664212x9ab190318242103'; //TODO: move to env variables
       const url = `https://api.weatherapi.com/v1/current.json?key=${api}&q=${cityName}&aqi=no`;
 
       const response = await fetch(url);
@@ -34,35 +37,31 @@ const useHomeScreen = () => {
         cityName: result.location.name,
         temperatureInCelsius: getCelsius(result.current.temp_f, 'fahrenheit'),
       };
-    } catch (error) {
-      console.error('Error in getWeather: ', error);
+    } catch (err: any) {
+      setError(err.message as string);
+      console.error('Error in getWeather: ', err.message);
     }
   };
-
   const fetchWeather = async () => {
     setLoading(true);
-    const citiesToFetch = ['Cairo', 'Al-Mansourah, Egypt', 'Alexandria'];
 
     try {
+      if (selectedCities.length === 0) {
+        return;
+      }
       const responses = await Promise.all(
-        citiesToFetch.map(city => getWeather(city)),
+        selectedCities.map((city: string) => getWeather(city)),
       );
 
       setCities(
         responses.filter(city => city !== (undefined as any)) as ICity[],
       );
-    } catch (error) {
-      console.error('Error in fetchWeather: ', error);
+    } catch (err) {
+      console.error('Error in fetchWeather: ', err);
     } finally {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-    fetchWeather();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const handleLogout = () => {
     Alert.alert(
       'Logout',
@@ -85,18 +84,48 @@ const useHomeScreen = () => {
     );
   };
 
+  useEffect(() => {
+    fetchWeather();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    setCurCity(cities[openedCityIndex]);
+  }, [cities, openedCityIndex]);
+
+  const showCityDialogHandler = (index: number) => {
+    setOpenedCityIndex(index);
+    setShowCityDialog(true);
+  };
+
+  const dismissCityDialogHandler = () => {
+    setShowCityDialog(false);
+  };
+
+  const showAddCityDialogHandler = () => {
+    setShowAddCityDialog(true);
+  };
+
+  const dismissAddCityDialogHandler = () => {
+    setShowAddCityDialog(false);
+  };
+
   return {
     user,
     getWeather,
     fetchWeather,
     loading,
-    cities,
+    error,
+    cities: selectedCities,
     handleLogout,
-    showDialog,
-    setShowDialog,
-    setOpenedCityIndex,
-    setCurCity,
     curCity,
+
+    showCityDialog,
+    showCityDialogHandler,
+    dismissCityDialogHandler,
+    showAddCityDialog,
+    showAddCityDialogHandler,
+    dismissAddCityDialogHandler,
   };
 };
 

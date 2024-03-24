@@ -1,8 +1,3 @@
-export interface IProps {}
+import type {withNavigationProps} from '@/navigation/types';
 
-export interface ICity {
-  [x: string]: any;
-  cityDate: any;
-  cityName: string;
-  temperatureInCelsius: number;
-}
+export type IProps = withNavigationProps<'Home'>;
