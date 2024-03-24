@@ -26,7 +26,7 @@ const AddCityPortal = ({
     useAddCityPortal({cities});
 
   return (
-    <Dialog visible={visible} {...props} title="Settings" style={styles.dialog}>
+    <Dialog visible={visible} {...props} title="Add City" style={styles.dialog}>
       <View style={styles.chipsContainer}>
         {cities.length > 0 ? (
           cities.map((city, index) => (
@@ -45,6 +45,7 @@ const AddCityPortal = ({
         label="Add City"
         theme={{roundness: 5}}
         style={{
+          borderColor: theme.colors.primaryContainer,
           backgroundColor: theme.colors.surfaceVariant,
         }}
         textColor="black"
@@ -52,7 +53,8 @@ const AddCityPortal = ({
         placeholderTextColor={theme.colors.onSurfaceVariant}
         value={text}
         onChangeText={handleChangeText}
-        autoFocus
+        // autoFocus
+        outlineStyle={{borderColor: theme.colors.primary}}
         dataDetectorTypes="address"
         error={!!error}
       />

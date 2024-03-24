@@ -7,10 +7,11 @@ const styles = StyleSheet.create({
   header: {
     marginHorizontal: 5,
     justifyContent: 'space-between',
+    alignContent: 'center',
     flexDirection: 'row',
-    marginBottom: 20,
   },
   userContainer: {
+    alignItems: 'center',
     flexDirection: 'row',
   },
   userName: {
@@ -18,7 +19,7 @@ const styles = StyleSheet.create({
   },
   listContentContainer: {
     marginHorizontal: 30,
-    paddingBottom: 20,
+    paddingBottom: 60,
   },
   cityCard: {
     marginBottom: 20,
@@ -40,6 +41,7 @@ const styles = StyleSheet.create({
     // fontSize: 20, // Smaller font size
     marginLeft: 4, // Add some spacing between label and value
   },
+  settingsContainer: {},
 });
 
 export default styles;

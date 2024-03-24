@@ -65,7 +65,7 @@ const CityCard = (props: IProps): React.ReactElement<IProps> => {
           />
           {/* City Name */}
           <Text fontVariant="sm" color="secondaryText">
-            {props.cityName}
+            {props.cityName ? props.cityName : 'Unkown city'}
           </Text>
         </View>
 

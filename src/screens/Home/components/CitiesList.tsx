@@ -6,15 +6,18 @@ import type {ICity} from '@/utils/commonTypes';
 interface IProps {
   cities: ICity[];
   onPressCity: (index: number) => void;
+  onScroll?: (event: any) => void;
 }
 
 const CitiesList = ({
   cities,
   onPressCity,
+  onScroll = () => {},
 }: IProps): React.ReactElement<IProps> => {
   return (
     <FlatList
       data={cities}
+      onScroll={onScroll}
       keyExtractor={(item: ICity, index: number) => index.toString()}
       renderItem={({item, index}: {item: ICity; index: number}) => (
         <CityCard
@@ -27,10 +30,6 @@ const CitiesList = ({
           style={styles.cityCard}
         />
       )}
-      ListEmptyComponent={() => <Text>No cities found!</Text>}
-      ListFooterComponent={() =>
-        cities.length > 0 && <Text>No more cities</Text>
-      }
       contentContainerStyle={styles.listContentContainer}
     />
   );

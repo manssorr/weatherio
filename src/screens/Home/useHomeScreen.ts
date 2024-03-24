@@ -25,7 +25,7 @@ const useHomeScreen = () => {
 
   const getWeather = async (cityName: string) => {
     try {
-      const api = 'd270e78601664212x9ab190318242103'; //TODO: move to env variables
+      const api = 'd270e786016642129ab190318242103'; //TODO: move to env variables
       const url = `https://api.weatherapi.com/v1/current.json?key=${api}&q=${cityName}&aqi=no`;
 
       const response = await fetch(url);
@@ -62,6 +62,7 @@ const useHomeScreen = () => {
       setLoading(false);
     }
   };
+
   const handleLogout = () => {
     Alert.alert(
       'Logout',
@@ -85,9 +86,10 @@ const useHomeScreen = () => {
   };
 
   useEffect(() => {
-    fetchWeather();
+    console.log('fetched', showAddCityDialog);
+    !showAddCityDialog && fetchWeather();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [showAddCityDialog]);
 
   useEffect(() => {
     setCurCity(cities[openedCityIndex]);
@@ -110,22 +112,30 @@ const useHomeScreen = () => {
     setShowAddCityDialog(false);
   };
 
+  const dimissLoading = () => {
+    setLoading(false);
+  };
+
   return {
     user,
     getWeather,
     fetchWeather,
     loading,
     error,
-    cities: selectedCities,
+    cities,
+    selectedCities,
     handleLogout,
     curCity,
 
     showCityDialog,
     showCityDialogHandler,
     dismissCityDialogHandler,
+
     showAddCityDialog,
     showAddCityDialogHandler,
     dismissAddCityDialogHandler,
+
+    dimissLoading,
   };
 };
 

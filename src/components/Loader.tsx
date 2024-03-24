@@ -15,7 +15,7 @@ const Loader = ({
   return (
     <Dialog
       visible={visible}
-      // dismissable={false}
+      dismissable={!!(props.dismissable && !!props.onDismiss)}
       // title={<Text fontVariant="md" color="white">
       theme={{
         colors: {backdrop: 'transparent'},
