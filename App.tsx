@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import React from 'react';
 import {StatusBar} from 'react-native';
 import {PersistGate} from 'redux-persist/integration/react';
@@ -12,6 +13,7 @@ import colors from '@/style/colors';
 import {Provider} from 'react-redux';
 import {persistor, store} from '@/redux/store';
 import AppRoute from '@/navigation/MainNavigator';
+import Loader from '@/components/Loader';
 
 const fontConfig = {
   fontFamily: 'Poppins-Regular',
@@ -22,15 +24,18 @@ const theme = {
   fonts: configureFonts({config: fontConfig}),
   dark: false,
   colors: {
+    ...DefaultTheme.colors,
+    onSurfaceVariant: colors.secondaryText, // onSurfaceVariant text inside input field before editing
     background: colors.white,
     primary: colors.primary,
     error: colors.red,
-    inversePrimary: colors.red,
+    // inversePrimary: colors.red,
     card: colors.white,
     text: colors.black,
     border: colors.border,
-    notification: colors.red,
+    // notification: colors.red,
     surface: colors.secondaryLightText,
+    onSurface: colors.secondaryText,
     tertiary: colors.darkText,
     backdrop: 'rgba(0, 0, 0, 0.3)',
     elevation: {
@@ -49,17 +54,17 @@ const theme = {
 };
 
 // @ts-ignore
-const {LightTheme} = adaptNavigationTheme({reactNavigationDark: theme});
+const {LightTheme} = adaptNavigationTheme({reactNavigationLight: theme});
 
 function App(): React.JSX.Element {
   return (
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <PaperProvider theme={LightTheme}>
+      <PaperProvider theme={LightTheme}>
+        <PersistGate loading={<Loader />} persistor={persistor}>
           <AppRoute />
-        </PaperProvider>
-        <StatusBar barStyle="default" />
-      </PersistGate>
+          <StatusBar barStyle="default" />
+        </PersistGate>
+      </PaperProvider>
     </Provider>
   );
 }
