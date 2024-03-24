@@ -30,6 +30,7 @@ interface IProps extends TextProps {
   style?: TextProps['style'];
   color?: TColor;
   children?: React.ReactNode;
+  align?: 'left' | 'center' | 'right';
 }
 
 const Text = (props: IProps): React.ReactElement<IProps> => {
@@ -39,12 +40,16 @@ const Text = (props: IProps): React.ReactElement<IProps> => {
     color: colors.black,
     fontSize: fontStyles[fontVariant].fontSize,
     fontFamily: fontStyles[fontVariant].fontFamily,
+    textAlign: 'left',
   };
   if (props.color) {
     customStyles.color = colors[props.color];
   }
   if (props.fontSize) {
     customStyles.fontSize = props.fontSize;
+  }
+  if (props.align) {
+    customStyles.textAlign = props.align;
   }
   if (props.fontWeight) {
     if (props.fontWeight === 'bold') {
@@ -67,5 +72,3 @@ const Text = (props: IProps): React.ReactElement<IProps> => {
 };
 
 export default Text;
-
-const styles = StyleSheet.create({});

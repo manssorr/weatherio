@@ -20,14 +20,16 @@ const fontConfig = {
 const theme = {
   ...DefaultTheme,
   fonts: configureFonts({config: fontConfig}),
-
+  dark: false,
   colors: {
     background: colors.white,
     primary: colors.primary,
     error: colors.red,
-
     inversePrimary: colors.red,
-
+    card: colors.white,
+    text: colors.black,
+    border: colors.border,
+    notification: colors.red,
     surface: colors.secondaryLightText,
     tertiary: colors.darkText,
     backdrop: 'rgba(0, 0, 0, 0.3)',
@@ -45,6 +47,8 @@ const theme = {
   },
   roundness: 5,
 };
+
+// @ts-ignore
 const {LightTheme} = adaptNavigationTheme({reactNavigationDark: theme});
 
 function App(): React.JSX.Element {

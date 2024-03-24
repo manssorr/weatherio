@@ -26,7 +26,11 @@ const Header = (props: IProps): React.ReactElement<IProps> => {
             <Icon name={props.icon} color="white" />
           </TouchableOpacity>
         )}
-        <Text fontVariant="header" color="white" style={styles.header_text}>
+        <Text
+          align="center"
+          fontVariant="header"
+          color="white"
+          style={styles.header_text}>
           {props.title}
         </Text>
       </View>
@@ -65,7 +69,6 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   header_text: {
-    textAlign: 'center',
     width: (DEVICE.SCREEN_WIDTH / 3) * 2,
   },
 

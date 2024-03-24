@@ -12,5 +12,6 @@ module.exports = {
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': 'warn',
     'react/no-unstable-nested-components': 'off',
+    curly: ['error', 'multi-line'],
   },
 };

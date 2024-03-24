@@ -1,9 +1,10 @@
 import {useNavigation} from '@react-navigation/native';
 import {useState, useEffect} from 'react';
 import auth from '@react-native-firebase/auth';
+import {AuthStackScreenProps} from '../../../navigation/types';
 
 const useSignupScreen = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<AuthStackScreenProps>();
   const [authError, setAuthError] = useState('');
 
   const [errors, setErrors] = useState({
