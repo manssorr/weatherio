@@ -1,6 +1,6 @@
 /* eslint-disable curly */
 import {NavigationContainer} from '@react-navigation/native';
-import AppNavigator from '@/navigation/AppNavigator';
+import HomeNavigator from '@/navigation/HomeNavigator';
 import AuthNavigator from '@/navigation/AuthNavigator';
 import {useDispatch, useSelector} from 'react-redux';
 import {selectIsLoggedIn, setSignIn} from '@/redux/slices/authSlice';
@@ -11,7 +11,7 @@ import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 GoogleSignin.configure({
   webClientId:
-    '291544356601-s0sbsvlf7pan2tr3pimod2lvh2recl32.apps.googleusercontent.com',
+    '291544356601-s0sbsvlf7pan2tr3pimod2lvh2recl32.apps.googleusercontent.com', //TODO: secure this with an env variable
 });
 
 const AppRoute = () => {
@@ -56,7 +56,7 @@ const AppRoute = () => {
 
   return (
     <NavigationContainer>
-      {isLoggedIn ? <AppNavigator /> : <AuthNavigator />}
+      {isLoggedIn ? <HomeNavigator /> : <AuthNavigator />}
     </NavigationContainer>
   );
 };
