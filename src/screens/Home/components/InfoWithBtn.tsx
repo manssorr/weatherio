@@ -22,6 +22,7 @@ const InfoWithBtn = ({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        marginHorizontal: 15,
         gap: 30,
       }}>
       <Text fontVariant="lg" color={textColor}>

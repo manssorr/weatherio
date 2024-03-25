@@ -5,6 +5,7 @@ import Text from '@/components/Text';
 import Icon from '@/components/Icon';
 import colors from '@/style/colors';
 import type {TIconsNames} from '@/assets';
+import {useTheme} from 'react-native-paper';
 
 interface IProps {
   title: string;
@@ -14,11 +15,14 @@ interface IProps {
 }
 
 const Header = (props: IProps): React.ReactElement<IProps> => {
+  const theme = useTheme();
+
   return (
     <View
       style={[
         styles.header_baground,
         DEVICE.isIOS && styles.header_background_ios,
+        {backgroundColor: theme.colors.primary},
       ]}>
       <View style={styles.header_container}>
         {props.icon && (
@@ -49,7 +53,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 15,
     borderBottomLeftRadius: 15,
     borderBottomRightRadius: 15,
-    backgroundColor: colors.red,
     justifyContent: 'center',
   },
   header_background_ios: {
@@ -73,7 +76,7 @@ const styles = StyleSheet.create({
   },
 
   header_icon: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.primaryLight,
     borderRadius: 22,
     height: 44,
     width: 44,

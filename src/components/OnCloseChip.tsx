@@ -1,3 +1,4 @@
+import colors from '@/style/colors';
 import {StyleSheet, View, type ViewStyle} from 'react-native';
 import {
   Chip as RNPChip,
@@ -45,14 +46,10 @@ const OnCloseChip = ({
       <TouchableRipple
         onPress={onClose}
         rippleColor={theme.colors.error}
-        removeClippedSubviews
         android_ripple={{color: theme.colors.errorContainer}}
         style={[
           styles.ripple,
           {
-            borderTopRightRadius: roundness,
-            borderBottomRightRadius: roundness,
-
             backgroundColor: theme.colors.primaryContainer,
           },
         ]}>
@@ -67,15 +64,31 @@ export default OnCloseChip;
 const styles = StyleSheet.create({
   chipContainer: {
     flexDirection: 'row',
+    borderRadius: 10,
+    overflow: 'hidden',
+    // alignItems: 'center',
+    // justifyContent: 'center',
     // backgroundColor: 'red',
   },
   chip: {
+    // borderWidth: 1,
+    width: '90%',
+    // borderColor: 'red',
     borderTopRightRadius: 0,
     borderBottomRightRadius: 0,
   },
   ripple: {
-    alignItems: 'center',
+    // minHeight: '10%',
+    // width: 20,
+    width: '10%',
+    borderLeftWidth: 0.2,
+    borderColor: colors.secondaryText,
+    paddingLeft: 2,
+    // borderColor: 'red',
+    alignItems: 'flex-start',
     justifyContent: 'center',
-    minWidth: 40,
+    // alignItems: 'center',
+    // justifyContent: 'center',
+    // minWidth: 40,
   },
 });

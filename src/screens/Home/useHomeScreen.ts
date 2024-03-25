@@ -1,27 +1,45 @@
 import {setSignOut} from '@/redux/slices/authSlice';
-import {useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {Alert} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {getCelsius} from '@/utils/helper';
 import auth from '@react-native-firebase/auth';
 import type {ICity} from '@/utils/commonTypes';
-import {selectCities} from '@/redux/slices/citySlice';
+import {addErroredLocation, selectCities} from '@/redux/slices/citySlice';
 
 const useHomeScreen = () => {
   const dispatch = useDispatch();
   const selectedCities = useSelector(selectCities);
-
   const user = auth().currentUser;
 
   const [loading, setLoading] = useState<boolean>(false);
-  const [cities, setCities] = useState<ICity[] | []>([]);
   const [error, setError] = useState<string>('');
 
-  const [showCityDialog, setShowCityDialog] = useState<boolean>(false);
+  const [cities, setCities] = useState<ICity[] | []>([]);
   const [openedCityIndex, setOpenedCityIndex] = useState<number>(0);
   const [curCity, setCurCity] = useState<ICity | undefined>(undefined);
+  // city info
+  const [showCityInfoPortal, setShowCityInfoPortal] = useState<boolean>(false);
 
-  const [showAddCityDialog, setShowAddCityDialog] = useState<boolean>(false);
+  // Settings menu
+  const [showSettingsMenu, setShowSettingsMenu] = useState(false);
+
+  // Fab Icon
+  const [isFabExtended, setIsFabExtended] = useState(true);
+
+  // Add city
+  const [showAddCityPortal, setShowAddCityPortal] = useState<boolean>(false);
+
+  // Manage city
+  const [showManageCityPortal, setShowManageCityPortal] =
+    useState<boolean>(false);
+
+  const onScroll = ({nativeEvent}: {nativeEvent: any}) => {
+    const currentScrollPosition =
+      Math.floor(nativeEvent?.contentOffset?.y) ?? 0;
+
+    setIsFabExtended(currentScrollPosition <= 0);
+  };
 
   const getWeather = async (cityName: string) => {
     try {
@@ -30,23 +48,30 @@ const useHomeScreen = () => {
 
       const response = await fetch(url);
       const result = await response.json();
-      if (!response.ok) throw new Error(result.error.message);
+      if (!response.ok) {
+        // console.error('Error in getWeather: ', cityName, result.error.message);
+        dispatch(addErroredLocation(cityName));
+
+        return;
+      }
 
       return {
         cityDate: result,
-        cityName: result.location.name,
-        temperatureInCelsius: getCelsius(result.current.temp_f, 'fahrenheit'),
+        cityName: result?.location?.name,
+        temperatureInCelsius: getCelsius(result?.current?.temp_f, 'fahrenheit'),
       };
     } catch (err: any) {
-      setError(err.message as string);
+      // setError(err.message as string);
       console.error('Error in getWeather: ', err.message);
     }
   };
   const fetchWeather = async () => {
     setLoading(true);
+    setError('');
 
     try {
       if (selectedCities.length === 0) {
+        setCities([]);
         return;
       }
       const responses = await Promise.all(
@@ -58,6 +83,7 @@ const useHomeScreen = () => {
       );
     } catch (err) {
       console.error('Error in fetchWeather: ', err);
+      setError(err as string);
     } finally {
       setLoading(false);
     }
@@ -85,57 +111,95 @@ const useHomeScreen = () => {
     );
   };
 
+  const dimissLoading = () => {
+    setLoading(false);
+  };
   useEffect(() => {
-    console.log('fetched', showAddCityDialog);
-    !showAddCityDialog && fetchWeather();
+    const isClosing = !showAddCityPortal && !showManageCityPortal;
+    isClosing && fetchWeather();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showAddCityDialog]);
+  }, [showAddCityPortal, showManageCityPortal]);
 
   useEffect(() => {
     setCurCity(cities[openedCityIndex]);
   }, [cities, openedCityIndex]);
 
-  const showCityDialogHandler = (index: number) => {
+  // handler => [action]target[state] e.g. openManageCityOnPress
+
+  // City info
+  const openCityInfoPortal = (index: number) => {
     setOpenedCityIndex(index);
-    setShowCityDialog(true);
+    setShowCityInfoPortal(true);
+  };
+  const dismissCityInfoPortal = () => {
+    setShowCityInfoPortal(false);
   };
 
-  const dismissCityDialogHandler = () => {
-    setShowCityDialog(false);
+  // Settings menu
+  const openSettingsMenu = () => setShowSettingsMenu(true);
+  const closeSettingsMenu = () => setShowSettingsMenu(false);
+  const openMenuItem = (action: 'addCity' | 'manageCity') => {
+    if (action === 'addCity') {
+      openAddCityPortal();
+    } else if (action === 'manageCity') {
+      openManageCityPortal();
+    }
+    closeSettingsMenu();
   };
 
-  const showAddCityDialogHandler = () => {
-    setShowAddCityDialog(true);
+  // Add city/Fab button
+  const openAddCityPortal = () => {
+    closeSettingsMenu();
+    setShowAddCityPortal(true);
   };
-
-  const dismissAddCityDialogHandler = () => {
-    setShowAddCityDialog(false);
+  const dismissAddCityPortal = () => {
+    setShowAddCityPortal(false);
   };
-
-  const dimissLoading = () => {
-    setLoading(false);
+  // Manage city
+  const openManageCityPortal = () => {
+    closeSettingsMenu();
+    setShowManageCityPortal(true);
+  };
+  const dismissManageCityPortal = () => {
+    setShowManageCityPortal(false);
   };
 
   return {
-    user,
-    getWeather,
-    fetchWeather,
+    // states
     loading,
     error,
+    dimissLoading,
+
+    // states
+    user,
     cities,
     selectedCities,
-    handleLogout,
     curCity,
 
-    showCityDialog,
-    showCityDialogHandler,
-    dismissCityDialogHandler,
+    // internal
+    onScroll,
+    handleLogout,
+    getWeather,
+    fetchWeather,
 
-    showAddCityDialog,
-    showAddCityDialogHandler,
-    dismissAddCityDialogHandler,
+    // Portals
+    isFabExtended,
+    openSettingsMenu,
+    closeSettingsMenu,
+    showSettingsMenu,
+    openMenuItem,
 
-    dimissLoading,
+    showCityInfoPortal,
+    openCityInfoPortal,
+    dismissCityInfoPortal,
+
+    showAddCityPortal,
+    openAddCityPortal,
+    dismissAddCityPortal,
+
+    showManageCityPortal,
+    openManageCityPortal,
+    dismissManageCityPortal,
   };
 };
 

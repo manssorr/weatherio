@@ -61,12 +61,44 @@ const useSigninScreen = () => {
       .finally(() => setLoading(false));
   };
 
+  const handleSigninToken = async (token: string) => {
+    setLoading(true);
+    auth()
+      .signInWithCustomToken(token)
+      .then(() => {
+        console.log('User account created & signed in!');
+      })
+      .catch(error => {
+        if (error.code === 'auth/email-already-in-use') {
+          console.log('That email address is already in use!');
+          setErrors({
+            ...errors,
+            email: 'That email address is already in use!',
+          });
+        }
+
+        if (error.code === 'auth/invalid-email') {
+          console.log('That email address is invalid!');
+          setErrors({
+            ...errors,
+            email: 'That email address is invalid!',
+          });
+        }
+
+        console.log('Error signing in:', error.message);
+
+        setAuthError('Wrong email or password');
+      })
+      .finally(() => setLoading(false));
+  };
+
   const onGoogleButtonPress = async () => {
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
 
       console.log(userInfo);
+      await handleSigninToken(userInfo?.idToken);
       // dispatch(
       //   setSignIn({
       //     isLoggedIn: true,

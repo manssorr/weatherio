@@ -1,46 +1,55 @@
-import CityCard from '@/components/CityCard';
+import {Menu} from 'react-native-paper';
+import {View, SafeAreaView, KeyboardAvoidingView} from 'react-native';
+import {IconButton} from 'react-native-paper';
+
 import Header from '@/components/Header';
-import {View, SafeAreaView, FlatList} from 'react-native';
 import Text from '@/components/Text';
-import type {IProps} from './types';
+import Loader from '@/components/Loader';
+
 import useHomeScreen from './useHomeScreen';
+import type {IProps} from './types';
 import styles from './styles';
+
 import CityInfoPortal from './components/CityInfoPortal';
 import CitiesList from './components/CitiesList';
-import Button from '@/components/Button';
-import Loader from '@/components/Loader';
-import {IconButton} from 'react-native-paper';
-import AddCityPortal from './components/SettingPortal';
+import AddCityPortal from './components/AddCityPortal';
 import InfoWithBtn from './components/InfoWithBtn';
 import FabButton from './components/FabButton';
-import {useState} from 'react';
-import {Menu, Divider} from 'react-native-paper';
+import ManageCityPortal from './components/ManageCityPortal';
 
 const HomeScreen = ({}: IProps): React.ReactElement<IProps> => {
   const {
-    user,
-    cities,
-    handleLogout,
     loading,
     error,
-    fetchWeather,
-    curCity,
-    showCityDialog,
-    showCityDialogHandler,
-    dismissCityDialogHandler,
-
-    selectedCities,
-    showAddCityDialog,
-    showAddCityDialogHandler,
-    dismissAddCityDialogHandler,
-
     dimissLoading,
-  } = useHomeScreen();
-  const [isExtended, setIsExtended] = useState(true);
-  const [menuVisible, setMenuVisible] = useState(false);
 
-  const openMenu = () => setMenuVisible(true);
-  const closeMenu = () => setMenuVisible(false);
+    user,
+    cities,
+    curCity,
+    onScroll,
+
+    handleLogout,
+    fetchWeather,
+    selectedCities,
+
+    isFabExtended,
+    openSettingsMenu,
+    closeSettingsMenu,
+    showSettingsMenu,
+    openMenuItem,
+
+    showCityInfoPortal,
+    openCityInfoPortal,
+    dismissCityInfoPortal,
+
+    showAddCityPortal,
+    openAddCityPortal,
+    dismissAddCityPortal,
+
+    showManageCityPortal,
+    openManageCityPortal,
+    dismissManageCityPortal,
+  } = useHomeScreen();
 
   const renderContent = () => {
     if (error) {
@@ -58,7 +67,7 @@ const HomeScreen = ({}: IProps): React.ReactElement<IProps> => {
       return (
         <InfoWithBtn
           btnText="Add one!"
-          onBtnPress={handleShowSettings}
+          onBtnPress={openAddCityPortal}
           text="Cities list is empty so far!"
           textColor="primaryLight"
         />
@@ -69,20 +78,9 @@ const HomeScreen = ({}: IProps): React.ReactElement<IProps> => {
       <CitiesList
         cities={cities}
         onScroll={onScroll}
-        onPressCity={showCityDialogHandler}
+        onPressCity={openCityInfoPortal}
       />
     );
-  };
-
-  const handleShowSettings = () => {
-    showAddCityDialogHandler();
-  };
-
-  const onScroll = ({nativeEvent}: {nativeEvent: any}) => {
-    const currentScrollPosition =
-      Math.floor(nativeEvent?.contentOffset?.y) ?? 0;
-
-    setIsExtended(currentScrollPosition <= 0);
   };
 
   return (
@@ -92,47 +90,62 @@ const HomeScreen = ({}: IProps): React.ReactElement<IProps> => {
 
       {/* Content */}
       <SafeAreaView style={{flex: 1}}>
-        <View style={styles.header}>
-          <View style={styles.userContainer}>
-            <Text>Welcome, </Text>
-            <Text style={styles.userName}>
-              {user?.displayName || 'New user'}
-            </Text>
-          </View>
-          <View style={styles.settingsContainer}>
-            <Menu
-              elevation={1}
-              contentStyle={{borderRadius: 10}}
-              visible={menuVisible}
-              anchorPosition="bottom"
-              onDismiss={closeMenu}
-              anchor={<IconButton icon="cog" size={24} onPress={openMenu} />}>
-              <Menu.Item onPress={handleShowSettings} title="Edit cities" />
-              {/* <Menu.Item onPress={() => {}} title="Item 2" />
-              <Divider />
+        <KeyboardAvoidingView style={{flex: 1}} behavior="height">
+          <View style={styles.header}>
+            <View style={styles.userContainer}>
+              <Text>Welcome, </Text>
+              <Text style={styles.userName}>
+                {user?.displayName || 'New user'}
+              </Text>
+            </View>
+            <View style={styles.settingsContainer}>
+              <Menu
+                elevation={1}
+                contentStyle={{borderRadius: 10}}
+                visible={showSettingsMenu}
+                anchorPosition="bottom"
+                onDismiss={closeSettingsMenu}
+                anchor={
+                  <IconButton icon="cog" size={24} onPress={openSettingsMenu} />
+                }>
+                <Menu.Item
+                  onPress={() => openMenuItem('manageCity')}
+                  title="Manage cities"
+                />
+                <Menu.Item
+                  onPress={() => openMenuItem('addCity')}
+                  title="Add City"
+                />
+                {/* <Divider />
               <Menu.Item onPress={() => {}} title="Item 3" /> */}
-            </Menu>
+              </Menu>
+            </View>
           </View>
-        </View>
-        {renderContent()}
+          {renderContent()}
 
-        {/* Portals */}
+          {/* Portals */}
 
-        <FabButton
-          isExtended={isExtended}
-          style={{}}
-          onPress={handleShowSettings}
-        />
-        <CityInfoPortal
-          city={curCity}
-          visible={showCityDialog}
-          onDismiss={dismissCityDialogHandler}
-        />
-        <AddCityPortal
-          cities={selectedCities}
-          visible={showAddCityDialog}
-          onDismiss={dismissAddCityDialogHandler}
-        />
+          <FabButton
+            isExtended={isFabExtended}
+            style={{}}
+            onPress={openAddCityPortal}
+          />
+          <CityInfoPortal
+            city={curCity}
+            visible={showCityInfoPortal}
+            onDismiss={dismissCityInfoPortal}
+          />
+          <AddCityPortal
+            cities={selectedCities}
+            visible={showAddCityPortal}
+            onDismiss={dismissAddCityPortal}
+          />
+          <ManageCityPortal
+            cities={selectedCities}
+            visible={showManageCityPortal}
+            onDismiss={dismissManageCityPortal}
+          />
+        </KeyboardAvoidingView>
       </SafeAreaView>
     </View>
   );

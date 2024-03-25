@@ -10,7 +10,17 @@ const getCelsius = (
 };
 
 const isObjectEmpty = (obj: any) => {
-  return Object.keys(obj).length === 0;
+  return obj && Object.keys(obj).length === 0;
 };
 
-export {getCelsius, isObjectEmpty};
+const limitString = (str: string, length: number = 50) => {
+  if (!str) {
+    return '';
+  }
+  if (str.length > length) {
+    return str.substring(0, length) + '...';
+  }
+  return str;
+};
+
+export {getCelsius, isObjectEmpty, limitString};

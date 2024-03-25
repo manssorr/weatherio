@@ -9,6 +9,7 @@ export interface ICityStore {
 const initialState: ICityStore = {
   selectedCity: null,
   cities: ['Alexandria', 'Cairo', 'Al-Mansourah, Egypt'],
+  erroredLocations: [],
 };
 
 const citySlice = createSlice({
@@ -27,15 +28,19 @@ const citySlice = createSlice({
     removeCity: (state: ICityStore, action: {payload: string}) => {
       state.cities = state.cities.filter(city => city !== action.payload);
     },
+    resetCities: (state: ICityStore) => {
+      state.cities = [];
+    },
   },
 });
 
-export const {setSelectedCity, setCities, addCity, removeCity} =
+export const {setSelectedCity, resetCities, setCities, addCity, removeCity} =
   citySlice.actions;
 
 // Selectors
 export const selectSelectedCity = state => state.city.selectedCity;
 export const selectCities = state => state.city.cities;
+export const selectErroredLocations = state => state.city.erroredLocations;
 
 const cityReducer = citySlice.reducer;
 export default cityReducer;
