@@ -63,8 +63,12 @@ const useSigninScreen = () => {
 
   const handleSigninToken = async (token: string) => {
     setLoading(true);
+
+    const googleCredential = auth.GoogleAuthProvider.credential(token);
+    console.log(`googleCredential`, googleCredential);
+
     auth()
-      .signInWithCustomToken(token)
+      .signInWithCredential(googleCredential)
       .then(() => {
         console.log('User account created & signed in!');
       })
@@ -94,7 +98,8 @@ const useSigninScreen = () => {
 
   const onGoogleButtonPress = async () => {
     try {
-      await GoogleSignin.hasPlayServices();
+      await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
+
       const userInfo = await GoogleSignin.signIn();
 
       console.log(userInfo);
